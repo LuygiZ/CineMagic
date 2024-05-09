@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DisciplineController;
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 // REPLACE THIS
@@ -10,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 // })->name('home');
 
 //WITH THIS
-Route::view('/', 'home')->name('home');
+//Route::view('/', 'home')->name('home');
+
+Route::get('/', [MovieController::class, 'index'])->name('home.show');
 
 // REPLACE THESE 7 ROUTES:
 // Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
