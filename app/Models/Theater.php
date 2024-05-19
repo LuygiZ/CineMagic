@@ -4,32 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Movie extends Model
+class Theater extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'id',
-        'title',
-        'genre_code',
-        'year',
-        'poster_filename',
-        'synopsis',
-        'trailer_url',
+        'name',
+        'photo_filename',
         'custom',
     ];
 
-    public function genre(): BelongsTo
-    {
-        return $this->belongsTo(Genre::class, 'genre_code', 'code');
-    }
+    public $timestamps = false;
 
     public function screenings(): HasMany
     {
         return $this->hasMany(Screening::class);
     }
 
+    public function seats(): HasMany
+    {
+        return $this->hasMany(Seat::class);
+    }
 }
