@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DisciplineController;
+use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\MovieController;
 
 Route::get('/', [MovieController::class, 'index'])->name('home.show');
@@ -19,6 +20,9 @@ Route::get('/', [MovieController::class, 'index'])->name('home.show');
 // WITH A SINGLE LINE OF CODE:
 //Route::resource('courses', CourseController::class);
 //Route::resource('disciplines', DisciplineController::class);
+
+Route::get('manageUsers', [ManageUsersController::class, 'index'])->name('manageUsers.index');
+Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class ManageUsersController extends Controller
+{
+    public function index(): View
+    {
+        $allUsers = User::paginate(15);
+        debug($allUsers);
+        return view('manageUsers.index')->with('allUsers', $allUsers);
+    }
+
+    public function show(User $user): View
+    {
+        return view('manageUsers.show')->with('course', $user);
+    }
+}
