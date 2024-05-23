@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Department of Computer Engineering</title>
+    <title>CineMagic</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -35,8 +35,8 @@
                     invisible h-0 sm:visible sm:h-auto">
                         <!-- Menu Item: Courses -->
                         <x-menus.menu-item
-                            content="Courses"
-                            href="#"
+                            content="Movies"
+                            href="{{route('movies')}}"
                             selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 

@@ -9,6 +9,15 @@ use App\Http\Controllers\MovieController;
 
 Route::get('/', [MovieController::class, 'index'])->name('home.show');
 
+//Filmes
+Route::get('movies', [App\Http\Controllers\MovieController::class, 'dados'])->name('movies');
+Route::get('movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');    
+Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
+Route::post('movies', [MovieController::class, 'store'])->name('movies.store');
+Route::put('movies/{movie}', [MovieController::class, 'update'])->name('movies.update');                    
+Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
+
 // REPLACE THESE 7 ROUTES:
 // Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
 // Route::get('courses/create', [CourseController::class, 'create'])->name('courses.create');
