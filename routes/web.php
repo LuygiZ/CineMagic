@@ -32,6 +32,7 @@ Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movi
 
 Route::get('manageUsers', [ManageUsersController::class, 'index'])->name('manageUsers.index');
 Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
+Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->name('manageUsers.edit');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

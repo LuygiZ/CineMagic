@@ -17,6 +17,11 @@ class ManageUsersController extends Controller
 
     public function show(User $user): View
     {
-        return view('manageUsers.show')->with('course', $user);
+        return view('manageUsers.show')->with('user', $user);
+    }
+
+    public function edit(User $user): View
+    {
+        return view('manageUsers.edit')->with('user', $user);
     }
 }

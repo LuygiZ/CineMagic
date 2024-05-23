@@ -31,6 +31,25 @@ class User extends Authenticatable implements MustVerifyEmail
         'custom',
     ];
 
+    public function getTipo()
+    {
+        if($this->type == "A"){
+            return "Administrador";
+        }else if($this->type == "C"){
+            return "Cliente";
+        }else{
+            return "Empregado";
+        }
+    }
+
+    public function getEstado(){
+        if($this->blocked == 1){
+            return "Bloqueado";
+        }else{
+            return "Ativo";
+        }
+    }
+
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
