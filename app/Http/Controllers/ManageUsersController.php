@@ -30,7 +30,6 @@ class ManageUsersController extends Controller
         ->paginate(20)
         ->withQueryString();
 
-        debug($users);
         return view('manageUsers.index', compact('allUsers', 'filterByType', 'filterByBlocked'));
     }
 
