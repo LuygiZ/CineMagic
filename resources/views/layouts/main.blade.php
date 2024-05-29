@@ -33,10 +33,10 @@
                     <!-- Menu Items -->
                     <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
                     invisible h-0 sm:visible sm:h-auto">
-                        <!-- Menu Item: Courses -->
+                        <!-- Menu Item: Movies -->
                         <x-menus.menu-item
                             content="Movies"
-                            href="{{route('movies')}}"
+                            href="{{ route('movies.index') }}"
                             selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 

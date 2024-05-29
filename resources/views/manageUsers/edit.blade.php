@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Edit User')
+@section('header-title', 'Editar Utilizador')
 
 @section('main')
 <div class="flex flex-col space-y-6">

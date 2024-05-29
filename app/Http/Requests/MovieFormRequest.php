@@ -25,9 +25,21 @@ class MovieFormRequest extends FormRequest
     {
         return [
             'title' =>         'required|string|max:255', 
-            'genre_code' =>    'required|string|max:20', 
+            'genre_code' =>    'required|exists:genres,code', 
             'year' =>            'required|digits:4', 
-            'synopsis' =>        'required|string'
+            'synopsis' =>        'required|string',
+            'poster_filename' => 'nullable|image|mimes:jpg,jpeg,png',
+            'trailer_url' => 'nullable|max:255'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Title is required',
+            'genre_code.required' => 'Genre is required',
+            'year.required' => 'Year is required',
+            'synopsis.required' => 'Synopsis is required',
         ];
     }
 }

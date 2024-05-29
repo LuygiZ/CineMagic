@@ -10,25 +10,53 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MovieFormRequest;
+use App\Models\Genre;
 
 class MovieController extends Controller
 {
 
-    public function dados(): View
+    public function index(Request $request): View
     {
-        $allMovies = Movie::all();
-        return view('home')->with('movies', $allMovies);
+        $movies = Movie::paginate(15);
+        $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
+        $genres = array_merge([null => 'Any Genre'], $genres);
+        $filterByGenre = $request->query('genre_code');
+        $filterByYear = $request->query('year');
+        $filterByTitle = $request->query('title');
+
+        $moviesQuery = Movie::query();
+
+        if ($filterByGenre !== null) {
+            $moviesQuery->where('genre_code', $filterByGenre);
+        }
+
+        if ($filterByYear !== null) {
+            $moviesQuery->where('year', $filterByYear);
+        }
+
+        if ($filterByTitle !== null) {
+            $moviesQuery->where(function ($query) use ($filterByTitle) {
+                $query->where('title', 'like', '%' . $filterByTitle . '%')
+                    ->orWhere('synopsis', 'like', '%' . $filterByTitle . '%');
+            });
+        }
+        
+
+        $allMovies = $moviesQuery
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('movies.index', compact('allMovies', 'filterByGenre', 'filterByYear', 'filterByTitle', 'genres'));
     }
 
-    public function index(): View
+    public function indexPoster(): View
     {
         $today = Carbon::today();
         $twoWeeksFromNow = Carbon::today()->addWeeks(2);
 
         // Get upcoming screenings within the next two weeks including today
         $upcomingScreenings = Screening::with('movie')
-        ->whereBetween('date', [$today, $twoWeeksFromNow])
-            ->get();
+            ->whereBetween('date', [$today, $twoWeeksFromNow])->get();
 
         // Extract unique movie IDs from the screenings
         $movieIds = $upcomingScreenings->pluck('movie_id')->unique();
@@ -39,67 +67,89 @@ class MovieController extends Controller
         return view('home')->with('movies', $movies);
     }
 
-    public function showCase(): View
-    {
-        return view('movies.showcase');
-    }
 
     public function create(): View
     {
-        $newMovie = new Movie();
-        return view('movies.create')->with('course', $newMovie);
+        $movie = new Movie();
+        $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
+        return view('movies.create',compact('genres','movie'));
     }
 
     public function store(MovieFormRequest $request): RedirectResponse
     {
         $newMovie = Movie::create($request->validated());
+
+        if ($request->hasFile('poster_filename')) {
+            $path=$request->poster_filename->store('public/posters');
+        }
+        $newMovie->poster_filename=basename($path);
+        $newMovie->save();
+
         $url = route('movies.show', ['movie' => $newMovie]);
         $htmlMessage = "Movie <a href='$url'><u>{$newMovie->title}</u></a> has been created successfully!";
         return redirect()->route('movies.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
-
+    
     public function edit(Movie $movie): View
     {
-        return view('movies.edit')->with('movie', $movie);
+        $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
+        return view('movies.edit', compact('genres','movie'));
     }
 
     public function update(MovieFormRequest $request, Movie $movie): RedirectResponse
     {
         $movie->update($request->validated());
-        $url = route('movies.show', ['course' => $movie]);
+
+        if ($request->hasFile('poster_filename')) {
+            if ($movie->imageExists) {
+                Storage::delete("public/posters/{$movies->poster_filename}");
+            }
+            $path = $request->poster_filename->store('public/posters');
+            $movie->poster_filename = basename($path);
+
+            $movie->save();
+        }
+
+        $url = route('movies.show', ['movie' => $movie]);
         $htmlMessage = "Movie <a href='$url'><u>{$movie->title}</u></a> has been updated successfully!";
         return redirect()->route('movies.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
-
-    public function destroy(Movie $movie)
-     {
-         $oldName = $movie->title;
-         try {
-             $movie->delete();
-             return redirect()->route('movies')
-                 ->with('alert-msg', 'Movie "' . $oldName . '" foi apagado com sucesso!')
-                 ->with('alert-type', 'success');
-         } catch (\Throwable $th) {
- 
-             if ($th->errorInfo[1] == 1451) {   // 1451 - MySQL Error number for "Cannot delete or update a parent row: a foreign key constraint fails (%s)"
-                 return redirect()->route('movies')
-                     ->with('alert-msg', 'Não foi possível apagar o Filme "' . $oldName . '", porque este Filme já está em uso!')
-                     ->with('alert-type', 'danger');
-             } else {
-                 return redirect()->route('filmes')
-                     ->with('alert-msg', 'Não foi possível apagar o Filme "' . $oldName . '". Erro: ' . $th->errorInfo[2])
-                     ->with('alert-type', 'danger');
-             }
-         }
-     }
+    public function destroy(Movie $movie): RedirectResponse
+    {
+        try {
+            $url = route('movies.show', ['movie' => $movie]);
+            $totalMovieScreenings = $movies->screenings()->count();
+            if ($totalMovieScreenings == 0) {
+                $movie->delete();
+                $alertType = 'success';
+                $alertMsg = "Movie {$movie->title} ({$movie->id}) has been deleted successfully!";
+            } else {
+                $alertType = 'warning';
+                $justification = match (true) {
+                    $totalMovieScreenings <= 0 => "",
+                    $totalMovieScreenings == 1 => "Existe 1 sessão para este filme",
+                    $totalMovieScreenings > 1 => "Existem $totalMovieScreenings sessões para este filme",
+                };
+                $alertMsg = "Movie <a href='$url'><u>{$movie->title}</u></a> cannot be deleted because $justification.";
+            }
+        } catch (\Exception $error) {
+            $alertType = 'danger';
+            $alertMsg = "It was not possible to delete the movie
+                            <a href='$url'><u>{$movie->title}</u></a>
+                            because there was an error with the operation!";
+        }
+        return redirect()->route('movies.index')
+            ->with('alert-type', $alertType)
+            ->with('alert-msg', $alertMsg);
+    }
 
     public function show(Movie $movie): View
     {
-        return view('movies.show')->with('movie', $movie);
+        $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
+        return view('movies.show', compact('genres','movie'));
     }
-
 }
