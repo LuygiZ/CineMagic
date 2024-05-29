@@ -15,6 +15,7 @@ class ManageUsersController extends Controller
         $users = User::paginate(15);
         $filterByType = $request->query('type');
         $filterByBlocked = $request->query('blocked');
+        $filterByName = $request->query('name');
 
         $usersQuery = User::query();
 
@@ -26,11 +27,16 @@ class ManageUsersController extends Controller
             $usersQuery->where('blocked', $filterByBlocked);
         }
 
+        if($filterByName !== null){
+            $usersQuery->where('name', 'like', '%' . $filterByName . '%');
+        }
+
         $allUsers = $usersQuery
         ->paginate(20)
         ->withQueryString();
 
-        return view('manageUsers.index', compact('allUsers', 'filterByType', 'filterByBlocked'));
+        debug($users);
+        return view('manageUsers.index', compact('allUsers', 'filterByType', 'filterByBlocked', 'filterByName'));
     }
 
     public function show(User $user): View
@@ -47,6 +53,16 @@ class ManageUsersController extends Controller
     {
         $newUser = new User();
         return view('manageUsers.create')->with('user', $newUser);
+    }
+
+    public function store(ManageUsersRequest $request): RedirectResponse
+    {
+        $newUser = User::create($request->validated());
+        $url = route('manageUsers.show', ['user' => $newUser]);
+        $htmlMessage = "User <a href='$url'><u>{$newUser->name}</u></a> has been created successfully!";
+        return redirect()->route('manageUsers.index')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
     }
 
     public function update(ManageUsersRequest $request, User $user): RedirectResponse

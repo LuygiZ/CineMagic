@@ -16,7 +16,7 @@
                     </p>
                 </header>
 
-                <form method="POST" action="#"
+                <form method="POST" action="{{route('manageUsers.store')}}"
                         enctype="multipart/form-data">
                     @csrf
                     @include('manageUsers.shared.fields', ['mode' => 'create'])

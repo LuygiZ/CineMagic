@@ -36,18 +36,24 @@
                         <x-table.icon-show class="ps-3 px-2 inline-block"
                         href="{{ route('manageUsers.show', ['user' => $user]) }}"/>
                     </td>
+                @else
+                    <td></td>
                 @endif
                 @if($showEdit && ($user->type == "A" || $user->type == "E"))
                     <td  class="text-right">
                         <x-table.icon-edit class="px-2 inline-block"
                         href="{{ route('manageUsers.edit', ['user' => $user]) }}"/>
                     </td>
+                @else
+                    <td></td>
                 @endif
                 @if($showDelete)
                     <td  class="text-right">
                         <x-table.icon-delete class="px-2 inline-block"
                         action="#"/>
                     </td>
+                @else
+                    <td></td>
                 @endif
             </tr>
         @endforeach

@@ -12,6 +12,8 @@
                         href="{{ route('manageUsers.edit', ['user' => $user]) }}"
                         text="Editar User"
                         type="primary"/>
+                    <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
+                                    href="{{ route('manageUsers.index') }}"/>
                 </div>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

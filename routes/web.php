@@ -32,6 +32,7 @@ Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movi
 
 //Manage Users
 Route::get('manageUsers', [ManageUsersController::class, 'index'])->name('manageUsers.index');
+Route::post('manageUsers', [ManageUsersController::class, 'store'])->name('manageUsers.store'); // Corrected this line
 Route::get('manageUsers/create', [ManageUsersController::class, 'create'])->name('manageUsers.create');
 Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
 Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->name('manageUsers.edit');

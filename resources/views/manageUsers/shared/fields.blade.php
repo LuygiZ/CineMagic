@@ -12,10 +12,18 @@
         <x-field.select name="type" label="Tipo de utilizador" :readonly="$readonly"
             :options="['A' => 'Administrador', 'E' => 'Empregado', 'C' => 'Cliente']"
             defaultValue="{{$user->type}}"/>
-            <x-field.checkbox name="blocked" label="Bloqueado" :readonly="$readonly"
-            value="{{$user->blocked}}"/>
+
+        @if ($mode == "create")
+        <x-field.input name="password" type="password" label="Password" :readonly="$readonly"
+            value=""/>
+        <x-field.input name="password" type="password" label="Confirmar Password" :readonly="$readonly"
+            value=""/>
+        @endif
+
+        <x-field.checkbox name="blocked" label="Bloqueado" :readonly="$readonly"
+        value="{{$user->blocked}}"/>
     </div>
-    
+
     <div class="pb-6">
         <x-field.image
             name="photo_file"
@@ -24,6 +32,7 @@
             deleteTitle="Apagar Foto"
             :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
             deleteForm="form_to_delete_photo"
-            imageUrl="/storage/photos/{{$user->photo_filename}}"/>
+            imageUrl="{{ Vite::asset('resources/img/photos/default.png') }}"/>
+
     </div>
 </div>

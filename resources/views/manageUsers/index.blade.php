@@ -11,7 +11,7 @@
             :types="[null => 'Qualquer Tipo', 'A' => 'Administrador', 'E' => 'Empregado', 'C' => 'Cliente']"
             :type="old('type', $filterByType)"
             :blocked="old('blocked', $filterByBlocked)"
-            name=""
+            :name="old('name', $filterByName)"
             class="mb-6"
         />
 
