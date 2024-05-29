@@ -60,9 +60,7 @@
             @disabled($readonly)
             "
             autofocus="autofocus"
-        >
-        {{ $value }}
-    </textarea>
+        >{{ $value }}</textarea>
     @error( $name )
         <div class="text-sm text-red-500">
             {{ $message }}

@@ -122,7 +122,7 @@ class MovieController extends Controller
     {
         try {
             $url = route('movies.show', ['movie' => $movie]);
-            $totalMovieScreenings = $movies->screenings()->count();
+            $totalMovieScreenings = $movie->screenings()->count();
             if ($totalMovieScreenings == 0) {
                 $movie->delete();
                 $alertType = 'success';
