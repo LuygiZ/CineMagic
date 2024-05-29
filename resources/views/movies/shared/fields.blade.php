@@ -11,8 +11,10 @@
             :options="$genres" value="{{ old('genre_code', $movie->genre_code) }}"/>
         <x-field.input name="year" label="Ano" :readonly="$readonly"
             value="{{ old('year', $movie->year) }}"/>
-        <x-field.textarea name="synopsis" label="Sumário" :readonly="$readonly"
-            value="{{ old('synopsis', $movie->synopsis) }}" class="resize-y"/> <!-- Remove fixed height -->
+        <div class="h-40 overflow-auto"> <!-- Add fixed height and overflow auto -->
+            <x-field.textarea name="synopsis" label="Sumário" :readonly="$readonly"
+                value="{{ old('synopsis', $movie->synopsis) }}" class="resize-y"/>
+        </div>
         <x-field.input name="trailer_url" label="Trailer URL" :readonly="$readonly"
             value="{{ old('trailer_url', $movie->trailer_url) }}"/>
     </div>
