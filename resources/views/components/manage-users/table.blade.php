@@ -5,7 +5,7 @@
             <th class="px-2 py-2 text-center hidden lg:table-cell">Nome</th>
             <th class="px-2 py-2 text-center">Email</th>
             <th class="px-2 py-2 text-center">Tipo</th>
-            <th class="px-2 py-2 text-center">Bloqueado</th>
+            <th class="px-2 py-2 text-center">Estado</th>
             @if($showView)
                 <th></th>
             @endif

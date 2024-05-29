@@ -11,10 +11,10 @@ Route::get('/', [MovieController::class, 'index'])->name('home.show');
 
 //Filmes
 Route::get('movies', [App\Http\Controllers\MovieController::class, 'dados'])->name('movies');
-Route::get('movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');    
+Route::get('movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
 Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::post('movies', [MovieController::class, 'store'])->name('movies.store');
-Route::put('movies/{movie}', [MovieController::class, 'update'])->name('movies.update');                    
+Route::put('movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
 Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
 
@@ -30,9 +30,12 @@ Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movi
 //Route::resource('courses', CourseController::class);
 //Route::resource('disciplines', DisciplineController::class);
 
+//Manage Users
 Route::get('manageUsers', [ManageUsersController::class, 'index'])->name('manageUsers.index');
+Route::get('manageUsers/create', [ManageUsersController::class, 'create'])->name('manageUsers.create');
 Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
 Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->name('manageUsers.edit');
+Route::put('manageUsers/{user}/update', [ManageUsersController::class, 'update'])->name('manageUsers.update');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -25,7 +25,7 @@
                 <div class="relative flex flex-col sm:flex-row px-6 sm:px-0 grow justify-between">
                     <!-- Logo -->
                     <div class="shrink-0 -ms-4">
-                        <a href="#">
+                        <a href="{{ route('home.show') }}">
                             <div class="h-16 w-40 bg-cover bg-[url('../img/politecnico_h.svg')] dark:bg-[url('../img/politecnico_h_white.svg')]"></div>
                         </a>
                     </div>
@@ -106,13 +106,17 @@
                             >
                             <x-slot:content>
                                 <div class="pe-1">
-                                    <img src="./storage/photos/{{ Auth::user()->photo_filename}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                    <img src="/storage/photos/{{ Auth::user()->photo_filename}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
                                 </div>
                                 {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}
                                 <div class="ps-1 sm:max-w-[calc(100vw-39rem)] md:max-w-[calc(100vw-41rem)] lg:max-w-[calc(100vw-46rem)] xl:max-w-[34rem] truncate">
                                     {{ Auth::user()->name }}
                                 </div>
                             </x-slot>
+                            <x-menus.submenu-item
+                                content="Gerir Utilizadores"
+                                selectable="0"
+                                href="{{ route('manageUsers.index') }}"/>
                             <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"

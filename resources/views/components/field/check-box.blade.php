@@ -1,4 +1,3 @@
-
 {{--
     NOTE: we've used the match to define multiple versions of width class,
     to ensure that all specific width related classes are defined statically
@@ -27,41 +26,37 @@
         '3/5' => 'w-3/5',
         '4/5' => 'w-4/5',
     };
-    $selectedValue = array_key_exists($value, $options) ? $value : $defaultValue;
 @endphp
 <div {{ $attributes->merge(['class' => "$widthClass"]) }}>
-    <label class="block font-medium text-sm text-gray-700 dark:text-gray-300" for="id_{{ $name }}">
-        {{ $label }}
-    </label>
-    <select id="id_{{ $name }}" name="{{ $name }}"
-        class="appearance-none block
-            mt-1 w-full
-            bg-white dark:bg-gray-900
-            text-black dark:text-gray-50
-            @error($name)
-                border-red-500 dark:border-red-500
-            @else
-                border-gray-300 dark:border-gray-700
-            @enderror
-            focus:border-indigo-500 dark:focus:border-indigo-400
-            focus:ring-indigo-500 dark:focus:ring-indigo-400
-            rounded-md shadow-sm
-            disabled:rounded-none disabled:shadow-none
-            disabled:border-t-transparent disabled:border-x-transparent
-            disabled:border-dashed
-            disabled:bg-none
-            disabled:opacity-100
-            disabled:select-none"
-            @required($required)
-            @disabled($readonly)
-            autofocus="autofocus"
-        >
-        @foreach ($options as $key => $value)
-            <option value="{{ $key }}" {{ $selectedValue == $key ? 'selected' : '' }}>{{ $value }}</option>
-        @endforeach
-    </select>
+    <div class="flex py-5">
+        <input name="{{ $name }}" type="hidden" value="0">
+        <input id="id_{{ $name }}" name="{{ $name }}" type="checkbox"
+            {{ $value ? 'checked' : '' }}
+            value="1"
+            class="appearance-none mt-0.5 w-5 h-5
+                bg-white dark:bg-gray-900
+                text-black dark:text-gray-50
+                @error($name)
+                    border-red-500 dark:border-red-500
+                @else
+                    border-gray-300 dark:border-gray-700
+                @enderror
+                focus:border-indigo-500 dark:focus:border-indigo-400
+                focus:ring-indigo-500 dark:focus:ring-indigo-400
+                shadow-sm
+                disabled:text-gray-500
+                disabled:opacity-100
+                disabled:select-none"
+                autofocus="autofocus"
+                @required($required)
+                @disabled($readonly)
+            >
+        <label class="ml-3 block font-normal text-base text-black dark:text-gray-50" for="id_{{ $name }}">
+            {{ $label }}
+        </label>
+    </div>
     @error( $name )
-        <div class="text-sm text-red-500">
+        <div class="text-sm text-red-500 -mt-5">
             {{ $message }}
         </div>
     @enderror

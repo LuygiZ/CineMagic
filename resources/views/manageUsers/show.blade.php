@@ -9,21 +9,9 @@
             <section>
                 <div class="flex flex-wrap justify-end items-center gap-4 mb-4">
                     <x-button
-                        href="#"
-                        text="New"
-                        type="success"/>
-                    <x-button
-                        href="#"
-                        text="Edit"
+                        href="{{ route('manageUsers.edit', ['user' => $user]) }}"
+                        text="Editar User"
                         type="primary"/>
-                    <form method="POST" action="#">
-                        @csrf
-                        @method('DELETE')
-                        <x-button
-                            element="submit"
-                            text="Delete"
-                            type="danger"/>
-                    </form>
                 </div>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
