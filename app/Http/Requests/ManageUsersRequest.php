@@ -31,7 +31,7 @@ class ManageUsersRequest extends FormRequest
             ],
             'type' => 'required|in:A,E,C',
             'blocked' => 'required|boolean',
-            'photo_file' => 'sometimes|image|max:4096', // maxsize = 4Mb
+            'photo_file' => 'sometimes|image|max:8192', // maxsize = 4Mb
         ];
     }
 }

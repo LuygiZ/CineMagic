@@ -39,7 +39,7 @@
 @endphp
 <div {{ $attributes }}>
     <div class="flex-col">
-        <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto"
+        <img id="imagePreview" class="{{$widthClass}} {{$maxHeightClass}} aspect-auto"
              src="{{ $imageUrl }}">
         @if(!$readonly)
         <div class="{{$widthClass}} flex-col space-y-4 items-stretch mt-4">
@@ -47,7 +47,7 @@
                 <div class="flex flex-row items-center">
                     <input id="id_{{ $name }}" name="{{ $name }}" type="file"
                         accept="image/png, image/jpeg"
-                        onchange="document.getElementById('id_{{ $name }}_selected_file').innerHTML= document.getElementById('id_{{ $name }}').files[0].name ?? ''"
+                        onchange="document.getElementById('id_{{ $name }}_selected_file').innerHTML = document.getElementById('id_{{ $name }}').files[0]?.name ?? ''; previewImage(event);"
                         class="hidden"/>
                         <label for="id_{{ $name }}"
                             class="min-w-32
@@ -87,3 +87,31 @@
         @endif
     </div>
 </div>
+
+
+<script>
+    function previewImage(event) {
+        console.log("AAAAAAAAAA");
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const preview = document.getElementById('imagePreview');
+
+        reader.onload = function() {
+            if (reader.readyState === 2) {
+                preview.src = reader.result;
+                preview.classList.remove('hidden');
+            }
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImage() {
+        const preview = document.getElementById('imagePreview');
+        preview.src = '';
+        preview.classList.add('hidden');
+        document.getElementById('poster_filename').value = '';
+    }
+</script>

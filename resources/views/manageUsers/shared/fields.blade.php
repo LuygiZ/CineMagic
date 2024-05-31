@@ -16,7 +16,7 @@
         @if ($mode == "create")
         <x-field.input name="password" type="password" label="Password" :readonly="$readonly"
             value=""/>
-        <x-field.input name="password" type="password" label="Confirmar Password" :readonly="$readonly"
+        <x-field.input name="password_confirmation" type="password" label="Confirmar Password" :readonly="$readonly"
             value=""/>
         @endif
 
@@ -25,14 +25,25 @@
     </div>
 
     <div class="pb-6">
-        <x-field.image
-            name="photo_file"
-            width="md"
-            :readonly="$readonly"
-            deleteTitle="Apagar Foto"
-            :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
-            deleteForm="form_to_delete_photo"
-            imageUrl="{{ Vite::asset('resources/img/photos/default.png') }}"/>
+        @if ($mode != "create")
+            <x-field.image
+                name="photo_file"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Apagar Foto"
+                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                deleteForm="form_to_delete_photo"
+                imageUrl="/storage/photos/{{$user->photo_filename}}"/>
 
+        @else
+            <x-field.image
+                name="photo_file"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Apagar Foto"
+                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                deleteForm="form_to_delete_photo"
+                :imageUrl="Vite::asset('resources/img/photos/default.png')"/>
+        @endif
     </div>
 </div>

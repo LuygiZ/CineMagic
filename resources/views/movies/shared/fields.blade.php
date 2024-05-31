@@ -18,7 +18,7 @@
         <x-field.input name="trailer_url" label="Trailer URL" :readonly="$readonly"
             value="{{ old('trailer_url', $movie->trailer_url) }}"/>
     </div>
-    
+
     <div class="pb-6">
         <x-field.image
             name="poster_filename"

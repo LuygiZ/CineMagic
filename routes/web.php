@@ -27,6 +27,8 @@ Route::get('manageUsers/create', [ManageUsersController::class, 'create'])->name
 Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
 Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->name('manageUsers.edit');
 Route::put('manageUsers/{user}/update', [ManageUsersController::class, 'update'])->name('manageUsers.update');
+Route::delete('manageUsers/{user}', [ManageUsersController::class, 'destroy'])->name('manageUsers.destroy');
+Route::post('/user/updateBlocked/{id}', [ManageUsersController::class, 'updateBlocked'])->name('user.updateBlocked');
 
 //Theaters
 
