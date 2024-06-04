@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
@@ -98,6 +99,12 @@ class ManageUsersController extends Controller
                 'blocked' => $request->blocked,
                 'password' => Hash::make($request->password),
             ]);
+
+            if ($request->hasFile('photo_file')) {
+                $path = $request->photo_file->store('public/photos');
+                $newUser->photo_filename = basename($path);
+                $newUser->save();
+            }
         }
 
         $url = route('manageUsers.show', ['user' => $newUser]);
@@ -109,6 +116,14 @@ class ManageUsersController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        if($user == Auth::user()){
+            $url = route('manageUsers.index');
+            $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado (utilizador atual)!";
+            return redirect()->route('manageUsers.index')
+                ->with('alert-type', 'danger')
+                ->with('alert-msg', $htmlMessage);
+        }
+
         if($user->type == 'C'){
             $url = route('manageUsers.index');
             $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado!";
@@ -142,7 +157,7 @@ class ManageUsersController extends Controller
         }
 
         $url = route('manageUsers.show', ['user' => $user]);
-        $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> has been updated successfully!";
+        $htmlMessage = "Utilizador <a href='$url'><u>{$user->name}</u></a> atualizado com sucesso!";
         return redirect()->route('manageUsers.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -150,6 +165,14 @@ class ManageUsersController extends Controller
 
     public function updateBlocked(Request $request, $id)
     {
+        if($id == Auth::user()->id){
+            $url = route('manageUsers.index');
+            $htmlMessage = "Nao é possivel bloquear o próprio utilizador";
+            return redirect()->route('manageUsers.index')
+                ->with('alert-type', 'danger')
+                ->with('alert-msg', $htmlMessage);
+        }
+
         $user = User::findOrFail($id);
         $user->blocked = $request->input('blocked');
         $user->save();
@@ -159,6 +182,39 @@ class ManageUsersController extends Controller
         return redirect()->route('manageUsers.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
+    }
+
+    public function destroyPhoto(User $user): RedirectResponse
+    {
+        if ($user->photo_filename) {
+            if (Storage::fileExists('public/photos/' . $user->photo_filename)) {
+                Storage::delete('public/photos/' . $user->photo_filename);
+            }
+            $user->photo_filename = null;
+            $user->save();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Photo do utilizador {$user->name} foi apagada com sucesso.");
+        }
+        return redirect()->back();
+    }
+
+    public function updatePhoto(ManageUsersRequest $request, User $user): RedirectResponse
+    {
+
+        if ($request->hasFile('photo_file')) {
+            // Delete previous file (if any)
+            if ($user->photo_filename &&
+                    Storage::fileExists('public/photos/' . $user->photo_filename)) {
+                    Storage::delete('public/photos/' . $user->photo_filename);
+            }
+
+            $path = $request->photo_file->store('public/photos');
+            $user->photo_filename = basename($path);
+            $user->save();
+
+        }
+        return redirect()->back();
     }
 
 }

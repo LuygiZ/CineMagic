@@ -91,7 +91,6 @@
 
 <script>
     function previewImage(event) {
-        console.log("AAAAAAAAAA");
         const file = event.target.files[0];
         const reader = new FileReader();
         const preview = document.getElementById('imagePreview');

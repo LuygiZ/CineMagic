@@ -15,7 +15,9 @@
             @endif
             @if($showDelete)
                 <th></th>
+                <th></th>
             @endif
+
         </tr>
         </thead>
         <tbody>
@@ -65,6 +67,16 @@
                             </svg>
                         </button>
                         @endif
+                    </form>
+                </td>
+
+                <td>
+                    <form method="POST" action="{{ route('manageUsers.destroy', ['user' => $user]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" name="blocked" value="0" class="border-0 bg-transparent p-0 m-0">
+                            <x-table.icon-delete class="px-2 inline-block" href="#"/>
+                        </button>
                     </form>
                 </td>
 
