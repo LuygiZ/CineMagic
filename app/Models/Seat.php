@@ -30,10 +30,4 @@ class Seat extends Model
     {
         return $this->hasMany(Ticket::class);
     }
-
-    public function hasValidTicket(): bool
-    {
-        return true;
-        return $this->tickets()->where('status', true)->exists();
-    }
 }

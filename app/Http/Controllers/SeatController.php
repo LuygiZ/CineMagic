@@ -8,16 +8,28 @@ use App\Models\Screening;
 use App\Models\Theater;
 use App\Models\Seat;
 use App\Models\Movie;
+use Carbon\Carbon;
 
 class SeatController extends Controller
 {
     public function index($screening): View
     {
         $screening = Screening::find($screening);
-        $movie = $screening->movie;
-        $theater = $screening->theater; 
-        $seats = $theater->seats;
-        
-        return view('seats.index', compact('screening', 'seats', 'movie'));
+        $seats = $screening->theater->seats;
+
+        $screeningDate = Carbon::parse($screening->date);
+        $hasScreeningPassed = $screeningDate->isPast();
+
+        foreach($seats as $seat){
+            /*if($hasScreeningPassed) 
+            {
+                $seat->ocupado = true;
+                continue;
+            }*/
+            $seat->lugar = $seat->row.$seat->seat_number;
+            $seat->ocupado = $screening->tickets->contains('seat_id', $seat->id);
+        }
+
+        return view('seats.index', compact('screening', 'seats'));
     }
 }

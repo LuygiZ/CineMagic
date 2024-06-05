@@ -34,8 +34,8 @@ Route::post('/user/updateBlocked/{id}', [ManageUsersController::class, 'updateBl
 Route::delete('manageUsers/{user}/photo', [ManageUsersController::class, 'destroyPhoto'])->name('manageUsers.photo.destroy');
 Route::put('manageUsers/{user}/updatePhoto', [ManageUsersController::class, 'updatePhoto'])->name('manageUsers.updatePhoto');
 
-//Seats
-Route::get('seats/{screening}', [SeatController::class, 'index'])->name('seat.index');
+//Screenings
+Route::get('screenings/{screening}', [SeatController::class, 'index'])->name('seat.index');
 
 //Theaters
 
