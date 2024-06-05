@@ -6,6 +6,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SeatController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -29,6 +30,9 @@ Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->n
 Route::put('manageUsers/{user}/update', [ManageUsersController::class, 'update'])->name('manageUsers.update');
 Route::delete('manageUsers/{user}', [ManageUsersController::class, 'destroy'])->name('manageUsers.destroy');
 Route::post('/user/updateBlocked/{id}', [ManageUsersController::class, 'updateBlocked'])->name('user.updateBlocked');
+
+//Seats
+Route::get('seats/{screening}', [SeatController::class, 'index'])->name('seat.index');
 
 //Theaters
 
