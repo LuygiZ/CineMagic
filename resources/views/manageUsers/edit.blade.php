@@ -12,7 +12,7 @@
                             href="{{ route('manageUsers.show', ['user' => $user]) }}"
                             text="Ver Detalhes"
                             type="info"/>
-                        <form method="POST" action="#">
+                        <form method="POST" action="{{ route('manageUsers.destroy', ['user' => $user]) }}">
                             @csrf
                             @method('DELETE')
                             <x-button
@@ -44,7 +44,7 @@
             </div>
         </div>
     <form class="hidden" id="form_to_delete_photo"
-        method="POST" action="#">
+        method="POST" action="{{ route('manageUsers.photo.destroy', ['user' => $user]) }}">
         @csrf
         @method('DELETE')
     </form>

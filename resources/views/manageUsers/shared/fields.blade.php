@@ -6,13 +6,12 @@
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
         <x-field.input name="name" label="Nome" :readonly="$readonly"
-            value="{{$user->name}}"/>
+            value="{{ old('name', $user->name) }}"/>
         <x-field.input name="email" type="email" label="Email" :readonly="$readonly"
-            value="{{$user->email}}"/>
+            value="{{ old('email', $user->email) }}"/>
         <x-field.select name="type" label="Tipo de utilizador" :readonly="$readonly"
             :options="['A' => 'Administrador', 'E' => 'Empregado', 'C' => 'Cliente']"
-            defaultValue="{{$user->type}}"/>
-
+            defaultValue="{{ old('type', $user->type) }}"/>
         @if ($mode == "create")
         <x-field.input name="password" type="password" label="Password" :readonly="$readonly"
             value=""/>
@@ -26,14 +25,25 @@
 
     <div class="pb-6">
         @if ($mode != "create")
-            <x-field.image
-                name="photo_file"
-                width="md"
-                :readonly="$readonly"
-                deleteTitle="Apagar Foto"
-                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
-                deleteForm="form_to_delete_photo"
-                imageUrl="/storage/photos/{{$user->photo_filename}}"/>
+            @if ($user->photo_filename)
+                <x-field.image
+                    name="photo_file"
+                    width="md"
+                    :readonly="$readonly"
+                    deleteTitle="Apagar Foto"
+                    :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                    deleteForm="form_to_delete_photo"
+                    imageUrl="/storage/photos/{{$user->photo_filename}}"/>
+            @else
+                <x-field.image
+                    name="photo_file"
+                    width="md"
+                    :readonly="$readonly"
+                    deleteTitle="Apagar Foto"
+                    :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                    deleteForm="form_to_delete_photo"
+                    :imageUrl="Vite::asset('resources/img/photos/default.png')"/>
+            @endif
 
         @else
             <x-field.image
@@ -44,6 +54,7 @@
                 :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
                 deleteForm="form_to_delete_photo"
                 :imageUrl="Vite::asset('resources/img/photos/default.png')"/>
+
         @endif
     </div>
 </div>

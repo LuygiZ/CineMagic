@@ -40,7 +40,7 @@ class MovieController extends Controller
                     ->orWhere('synopsis', 'like', '%' . $filterByTitle . '%');
             });
         }
-        
+
 
         $allMovies = $moviesQuery
             ->paginate(20)
@@ -91,7 +91,7 @@ class MovieController extends Controller
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
-    
+
     public function edit(Movie $movie): View
     {
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();

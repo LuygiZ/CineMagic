@@ -7,6 +7,7 @@ use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\PdfController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -30,6 +31,8 @@ Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->n
 Route::put('manageUsers/{user}/update', [ManageUsersController::class, 'update'])->name('manageUsers.update');
 Route::delete('manageUsers/{user}', [ManageUsersController::class, 'destroy'])->name('manageUsers.destroy');
 Route::post('/user/updateBlocked/{id}', [ManageUsersController::class, 'updateBlocked'])->name('user.updateBlocked');
+Route::delete('manageUsers/{user}/photo', [ManageUsersController::class, 'destroyPhoto'])->name('manageUsers.photo.destroy');
+Route::put('manageUsers/{user}/updatePhoto', [ManageUsersController::class, 'updatePhoto'])->name('manageUsers.updatePhoto');
 
 //Seats
 Route::get('seats/{screening}', [SeatController::class, 'index'])->name('seat.index');
@@ -37,6 +40,9 @@ Route::get('seats/{screening}', [SeatController::class, 'index'])->name('seat.in
 //Theaters
 
 //Genres
+
+//Pdf
+Route::get('generatePdf', [PdfController::class, 'generatePdf']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
