@@ -33,7 +33,6 @@
     }
 </style>
 
-
 <body>
     <h1 class="title">CineMAGIC</h1>
     <hr>

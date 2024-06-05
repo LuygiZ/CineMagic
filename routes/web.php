@@ -8,6 +8,7 @@ use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\CartController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -43,6 +44,9 @@ Route::get('screenings/{screening}', [SeatController::class, 'index'])->name('se
 
 //Pdf
 Route::get('generatePdf', [PdfController::class, 'generatePdf']);
+
+//Cart
+Route::get('cart', [CartController::class, 'show'])->name('cart.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -15,7 +15,6 @@ class PdfController extends Controller
             'ticketCode' => "1234567"
         ];
 
-
         $pdf = Pdf::loadView('pdf.generatePurchase', $data);
         return $pdf->download('Purchase.pdf');
     }

@@ -199,7 +199,7 @@ class ManageUsersController extends Controller
         return redirect()->back();
     }
 
-    public function updatePhoto(ManageUsersRequest $request, User $user): RedirectResponse
+    public function updatePhoto(ManageUsersRequest $request, User $user)
     {
 
         if ($request->hasFile('photo_file')) {
@@ -214,7 +214,7 @@ class ManageUsersController extends Controller
             $user->save();
 
         }
-        return redirect()->back();
+        return view('manageUsers.show')->with('user', $user);
     }
 
 }

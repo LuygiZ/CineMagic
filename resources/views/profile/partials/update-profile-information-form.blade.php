@@ -13,15 +13,45 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        @if ($user->photo_filename)
+            <x-field.image
+                name="photo_file"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Apagar Foto"
+                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                deleteForm="form_to_delete_photo"
+                imageUrl="/storage/photos/{{$user->photo_filename}}"/>
+        @else
+            <x-field.image
+                name="photo_file"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Apagar Foto"
+                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
+                deleteForm="form_to_delete_photo"
+                :imageUrl="Vite::asset('resources/img/photos/default.png')"/>
+        @endif
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+
+        @if (Auth::user()->type == "C")
+        <x-field.input name="nif" type="text" label="Nif" :readonly="$readonly"
+            value="{{ old('nif', $user->customer->nif) }}"/>
+
+        <x-field.select name="payment_type" label="Método de pagamento" :readonly="$readonly"
+            :options="['VISA' => 'VISA', 'PAYPAL' => 'PAYPAL', 'MBWAY' => 'MBWAY', 'NONE' => 'Sem metodo de pagamento'] "
+            defaultValue="{{ old('payment_type', $user->customer->payment_type ?? 'NONE') }}"/>
+    @endif
+
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -48,7 +78,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>{{ __('Guardar') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
                 <p

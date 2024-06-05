@@ -106,7 +106,11 @@
                             >
                             <x-slot:content>
                                 <div class="pe-1">
-                                    <img src="/storage/photos/{{ Auth::user()->photo_filename}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                    @if (Auth::user()->photo_filename)
+                                      <img src="/storage/photos/{{ Auth::user()->photo_filename}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                    @else
+                                       <img src=" {{Vite::asset('resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                    @endif
                                 </div>
                                 {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}
                                 <div class="ps-1 sm:max-w-[calc(100vw-39rem)] md:max-w-[calc(100vw-41rem)] lg:max-w-[calc(100vw-46rem)] xl:max-w-[34rem] truncate">
