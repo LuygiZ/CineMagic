@@ -36,7 +36,7 @@
                 @if($showView && ($user->type == "A" || $user->type == "E"))
                     <td class="text-right">
                         <x-table.icon-show class="ps-3 px-2 inline-block"
-                        href="{{ route('manageUsers.show', ['user' => $user]) }}"/>
+                        href="{{ route('users.show', ['user' => $user]) }}"/>
                     </td>
                 @else
                     <td></td>
@@ -44,7 +44,7 @@
                 @if($showEdit && ($user->type == "A" || $user->type == "E"))
                     <td  class="text-right">
                         <x-table.icon-edit class="px-2 inline-block"
-                        href="{{ route('manageUsers.edit', ['user' => $user]) }}"/>
+                        href="{{ route('users.edit', ['user' => $user]) }}"/>
                     </td>
                 @else
                     <td></td>
@@ -71,7 +71,7 @@
                 </td>
 
                 <td>
-                    <form method="POST" action="{{ route('manageUsers.destroy', ['user' => $user]) }}">
+                    <form method="POST" action="{{ route('users.destroy', ['user' => $user]) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" name="blocked" value="0" class="border-0 bg-transparent p-0 m-0">

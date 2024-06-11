@@ -35,7 +35,7 @@
     </div>
 
     <form class="hidden" id="form_to_delete_photo"
-        method="POST" action="{{ route('manageUsers.photo.destroy', ['user' => $user]) }}">
+        method="POST" action="{{ route('users.photo.destroy', ['user' => $user]) }}">
         @csrf
         @method('DELETE')
     </form>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ManageUsersRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class ManageUsersController extends Controller
+class UserController extends Controller
 {
     public function index(Request $request): View
     {
@@ -42,26 +42,26 @@ class ManageUsersController extends Controller
         ->withQueryString();
 
         debug($users);
-        return view('manageUsers.index', compact('allUsers', 'filterByType', 'filterByBlocked', 'filterByName'));
+        return view('users.index', compact('allUsers', 'filterByType', 'filterByBlocked', 'filterByName'));
     }
 
     public function show(User $user): View
     {
-        return view('manageUsers.show')->with('user', $user);
+        return view('users.show')->with('user', $user);
     }
 
     public function edit(User $user): View
     {
-        return view('manageUsers.edit')->with('user', $user);
+        return view('users.edit')->with('user', $user);
     }
 
     public function create(): View
     {
         $newUser = new User();
-        return view('manageUsers.create')->with('user', $newUser);
+        return view('users.create')->with('user', $newUser);
     }
 
-    public function store(ManageUsersRequest $request): RedirectResponse
+    public function store(UserRequest $request): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -107,9 +107,9 @@ class ManageUsersController extends Controller
             }
         }
 
-        $url = route('manageUsers.show', ['user' => $newUser]);
-        $htmlMessage = "User <a href='$url'><u>{$newUser->name}</u></a> has been created successfully!";
-        return redirect()->route('manageUsers.index')
+        $url = route('users.show', ['user' => $newUser]);
+        $htmlMessage = "User <a href='$url'><u>{$newUser->name}</u></a> foi criado com sucesso!";
+        return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -117,58 +117,68 @@ class ManageUsersController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         if($user == Auth::user()){
-            $url = route('manageUsers.index');
+            $url = route('users.index');
             $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado (utilizador atual)!";
-            return redirect()->route('manageUsers.index')
+            return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
         }
 
         if($user->type == 'C'){
-            $url = route('manageUsers.index');
-            $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado!";
-            return redirect()->route('manageUsers.index')
+            $url = route('users.index');
+            $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado! (cliente)";
+            return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
         }
 
         $user->delete();
-        $url = route('manageUsers.index');
-        $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> has been deleted successfully!";
-        return redirect()->route('manageUsers.index')
+        $url = route('users.index');
+        $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> foi apagado com sucesso!";
+        return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
 
-    public function update(ManageUsersRequest $request, User $user): RedirectResponse
+    public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->validated());
+        $validatedData = $request->validated();
 
-        if ($request->hasFile('photo_file')) {
-            // Delete previous file (if any)
-            if ($user->photo_filename &&
-                    Storage::fileExists('public/photos/' . $user->photo_filename)) {
-                    Storage::delete('public/photos/' . $user->photo_filename);
+        DB::transaction(function () use ($validatedData, $request, $user) {
+            
+            $user->update($validatedData);
+
+            if(!Customer::find($user->id)){
+                $newCustomer = new Customer();
+                $newCustomer->id = $user->id;
+                $newCustomer->save();
             }
 
-            $path = $request->photo_file->store('public/photos');
-            $user->photo_filename = basename($path);
-            $user->save();
-        }
+            if ($request->hasFile('photo_file')) {
+                if ($user->photo_filename && Storage::exists('public/photos/' . $user->photo_filename)) {
+                    Storage::delete('public/photos/' . $user->photo_filename);
+                }
 
-        $url = route('manageUsers.show', ['user' => $user]);
+                $path = $request->photo_file->store('public/photos');
+                $user->photo_filename = basename($path);
+                $user->save();
+            }
+        });
+
+        $url = route('users.show', ['user' => $user]);
         $htmlMessage = "Utilizador <a href='$url'><u>{$user->name}</u></a> atualizado com sucesso!";
-        return redirect()->route('manageUsers.index')
+        return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
+
 
     public function updateBlocked(Request $request, $id)
     {
         if($id == Auth::user()->id){
-            $url = route('manageUsers.index');
+            $url = route('users.index');
             $htmlMessage = "Nao é possivel bloquear o próprio utilizador";
-            return redirect()->route('manageUsers.index')
+            return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
         }
@@ -177,9 +187,9 @@ class ManageUsersController extends Controller
         $user->blocked = $request->input('blocked');
         $user->save();
 
-        $url = route('manageUsers.show', ['user' => $user]);
+        $url = route('users.show', ['user' => $user]);
         $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> está agora " . ($user->blocked ? 'bloqueado' : 'desbloqueado') . "!";
-        return redirect()->route('manageUsers.index')
+        return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -194,16 +204,15 @@ class ManageUsersController extends Controller
             $user->save();
         return redirect()->back()
             ->with('alert-type', 'success')
-            ->with('alert-msg', "Photo do utilizador {$user->name} foi apagada com sucesso.");
+            ->with('alert-msg', "Foto do utilizador {$user->name} foi apagada com sucesso.");
         }
         return redirect()->back();
     }
 
-    public function updatePhoto(ManageUsersRequest $request, User $user)
+    public function updatePhoto(UserRequest $request, User $user)
     {
 
         if ($request->hasFile('photo_file')) {
-            // Delete previous file (if any)
             if ($user->photo_filename &&
                     Storage::fileExists('public/photos/' . $user->photo_filename)) {
                     Storage::delete('public/photos/' . $user->photo_filename);
@@ -214,7 +223,7 @@ class ManageUsersController extends Controller
             $user->save();
 
         }
-        return view('manageUsers.show')->with('user', $user);
+        return view('users.show')->with('user', $user);
     }
 
 }

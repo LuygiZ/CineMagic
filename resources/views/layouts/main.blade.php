@@ -40,20 +40,6 @@
                             selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 
-                        <!-- Menu Item: Disciplines -->
-                        <x-menus.menu-item
-                            content="Disciplines"
-                            selectable="1"
-                            href="#"
-                            selected="{{ Route::currentRouteName() == 'disciplines.index'}}"
-                            />
-                        <x-menus.menu-item
-                            content="Disciplines"
-                            selectable="1"
-                            href="{{ route('manageUsers.index') }}"
-                            selected="{{ Route::currentRouteName() == 'disciplines.index'}}"
-                            />
-
                         @auth
                         <!-- Menu Item: Teachers -->
                         <x-menus.menu-item
@@ -120,7 +106,7 @@
                             <x-menus.submenu-item
                                 content="Gerir Utilizadores"
                                 selectable="0"
-                                href="{{ route('manageUsers.index') }}"/>
+                                href="{{ route('users.index') }}"/>
                             <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"

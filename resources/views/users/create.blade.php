@@ -16,10 +16,10 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{route('manageUsers.store')}}"
+                <form method="POST" action="{{route('users.store')}}"
                         enctype="multipart/form-data">
                     @csrf
-                    @include('manageUsers.shared.fields', ['mode' => 'create'])
+                    @include('users.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">
                         <x-button element="submit" type="dark" text="Guardar novo User" class="uppercase"/>
                     </div>

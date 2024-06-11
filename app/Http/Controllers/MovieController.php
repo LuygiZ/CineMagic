@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MovieFormRequest;
 use App\Models\Genre;
+use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
@@ -104,7 +105,7 @@ class MovieController extends Controller
 
         if ($request->hasFile('poster_filename')) {
             if ($movie->imageExists) {
-                Storage::delete("public/posters/{$movies->poster_filename}");
+                Storage::delete("public/posters/{$movie->poster_filename}");
             }
             $path = $request->poster_filename->store('public/posters');
             $movie->poster_filename = basename($path);

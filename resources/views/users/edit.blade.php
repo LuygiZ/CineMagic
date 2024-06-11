@@ -9,10 +9,10 @@
                 <section>
                     <div class="flex flex-wrap justify-end items-center gap-4 mb-4">
                         <x-button
-                            href="{{ route('manageUsers.show', ['user' => $user]) }}"
+                            href="{{ route('users.show', ['user' => $user]) }}"
                             text="Ver Detalhes"
                             type="info"/>
-                        <form method="POST" action="{{ route('manageUsers.destroy', ['user' => $user]) }}">
+                        <form method="POST" action="{{ route('users.destroy', ['user' => $user]) }}">
                             @csrf
                             @method('DELETE')
                             <x-button
@@ -30,10 +30,10 @@
                         </p>
                     </header>
 
-                    <form method="POST" action="{{ route('manageUsers.update', ['user' => $user]) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update', ['user' => $user]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        @include('manageUsers.shared.fields', ['mode' => 'edit'])
+                        @include('users.shared.fields', ['mode' => 'edit'])
                         <div class="flex mt-6">
                             <x-button element="submit" type="dark" text="Guardar" class="uppercase"/>
                             <x-button element="a" type="light" text="Cancelar" class="uppercase ms-4"
@@ -44,7 +44,7 @@
             </div>
         </div>
     <form class="hidden" id="form_to_delete_photo"
-        method="POST" action="{{ route('manageUsers.photo.destroy', ['user' => $user]) }}">
+        method="POST" action="{{ route('users.photo.destroy', ['user' => $user]) }}">
         @csrf
         @method('DELETE')
     </form>

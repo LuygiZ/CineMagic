@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\manageUsers;
+namespace App\View\Components\users;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -27,6 +27,6 @@ class filterCard extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.manage-users.filterCard');
+        return view('components.users.filterCard');
     }
 }

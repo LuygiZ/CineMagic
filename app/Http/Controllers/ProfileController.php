@@ -45,7 +45,6 @@ class ProfileController extends Controller
             if(in_array($request->payment_type, $validPaymentTypes)){
                 $customer->payment_type = $request->payment_type == 'NONE' ? null : $request->payment_type;
             } else {
-                // Defina um valor padrão ou lance uma exceção se o valor não for válido
                 $customer->payment_type = null;
             }
 

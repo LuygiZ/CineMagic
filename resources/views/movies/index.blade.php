@@ -11,7 +11,7 @@
             :genre_code="old('genre_code', $filterByGenre)"
             :year="old('year', $filterByYear)"
             :genres="$genres"
-            title="old('title', $filterByTitle)"
+            :title="old('title', $filterByTitle)"
             class="mb-6"
         />
 

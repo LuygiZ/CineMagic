@@ -2,13 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DisciplineController;
-use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -24,16 +22,17 @@ Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
 Route::resource('movies', MovieController::class);
 
 //Manage Users
-Route::get('manageUsers', [ManageUsersController::class, 'index'])->name('manageUsers.index');
-Route::post('manageUsers', [ManageUsersController::class, 'store'])->name('manageUsers.store'); // Corrected this line
-Route::get('manageUsers/create', [ManageUsersController::class, 'create'])->name('manageUsers.create');
-Route::get('manageUsers/{user}', [ManageUsersController::class, 'show'])->name('manageUsers.show');
-Route::get('manageUsers/{user}/edit', [ManageUsersController::class, 'edit'])->name('manageUsers.edit');
-Route::put('manageUsers/{user}/update', [ManageUsersController::class, 'update'])->name('manageUsers.update');
-Route::delete('manageUsers/{user}', [ManageUsersController::class, 'destroy'])->name('manageUsers.destroy');
-Route::post('/user/updateBlocked/{id}', [ManageUsersController::class, 'updateBlocked'])->name('user.updateBlocked');
-Route::delete('manageUsers/{user}/photo', [ManageUsersController::class, 'destroyPhoto'])->name('manageUsers.photo.destroy');
-Route::put('manageUsers/{user}/updatePhoto', [ManageUsersController::class, 'updatePhoto'])->name('manageUsers.updatePhoto');
+//Route::get('users', [UserController::class, 'index'])->name('users.index');
+//Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+//Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+//Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+//Route::put('users/{user}/update', [UserController::class, 'update'])->name('users.update');
+//Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::resource('users', UserController::class);
+Route::post('users', [UserController::class, 'store'])->name('users.store');
+Route::post('/user/updateBlocked/{id}', [UserController::class, 'updateBlocked'])->name('user.updateBlocked');
+Route::delete('users/{user}/photo', [UserController::class, 'destroyPhoto'])->name('users.photo.destroy');
+Route::put('users/{user}/updatePhoto', [UserController::class, 'updatePhoto'])->name('users.updatePhoto');
 
 //Screenings
 Route::get('screenings/{screening}', [SeatController::class, 'index'])->name('seat.index');
