@@ -41,7 +41,6 @@ class UserController extends Controller
         ->paginate(20)
         ->withQueryString();
 
-        debug($users);
         return view('users.index', compact('allUsers', 'filterByType', 'filterByBlocked', 'filterByName'));
     }
 
@@ -145,7 +144,7 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData, $request, $user) {
-            
+
             $user->update($validatedData);
 
             if(!Customer::find($user->id)){

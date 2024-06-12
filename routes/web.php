@@ -3,10 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
-use App\Http\Controllers\SeatController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ScreeningController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -28,6 +28,7 @@ Route::resource('movies', MovieController::class);
 //Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
 //Route::put('users/{user}/update', [UserController::class, 'update'])->name('users.update');
 //Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
 Route::resource('users', UserController::class);
 Route::post('users', [UserController::class, 'store'])->name('users.store');
 Route::post('/user/updateBlocked/{id}', [UserController::class, 'updateBlocked'])->name('user.updateBlocked');
@@ -35,7 +36,15 @@ Route::delete('users/{user}/photo', [UserController::class, 'destroyPhoto'])->na
 Route::put('users/{user}/updatePhoto', [UserController::class, 'updatePhoto'])->name('users.updatePhoto');
 
 //Screenings
-Route::get('screenings/{screening}', [SeatController::class, 'index'])->name('seat.index');
+Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
+Route::get('screenings', [ScreeningController::class, 'index'])->name('screenings.index');
+Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
+Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+Route::put('screenings/{screening}/update', [ScreeningController::class, 'update'])->name('screenings.update');
+Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+
+
+Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 
 //Theaters
 

@@ -40,6 +40,12 @@
                             selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 
+                        <x-menus.menu-item
+                        content="Screenings"
+                        href="{{ route('screenings.index') }}"
+                        selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
+                        />
+
                         @auth
                         <!-- Menu Item: Teachers -->
                         <x-menus.menu-item
