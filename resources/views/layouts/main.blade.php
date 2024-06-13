@@ -83,14 +83,6 @@
 
                         <div class="grow"></div>
 
-                        <!-- Menu Item: Cart -->
-                        @if (session('cart'))
-                            <x-menus.cart
-                                :href="route('cart.show')"
-                                selectable="1"
-                                selected="{{ Route::currentRouteName() == 'cart.show'}}"
-                                :total="session('cart')->count()"/>
-                        @endif
                         @auth
                         <x-menus.submenu
                             selectable="0"

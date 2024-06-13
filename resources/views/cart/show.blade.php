@@ -9,19 +9,34 @@
             @empty($cart)
                 <h3 class="text-xl w-96 text-center">O Carrinho está vazio</h3>
             @else
-            <div class="font-base text-sm text-gray-700 dark:text-gray-300">
-                <h1>Tabela</h1>
-            </div>
-            <div class="mt-12">
+            <div class="mt-5">
                 <div class="flex justify-between space-x-12 items-end">
                     <div>
                         <h3 class="mb-4 text-xl">Shopping Cart Confirmation </h3>
                         <form action="{{ route('cart.confirm') }}" method="post">
                             @csrf
-                                <x-field.input name="student_number" label="Student Number" width="lg"
-                                                :readonly="false"
-                                                value="{{ old('student_number') }}"/>
-                                <x-button element="submit" type="dark" text="Confirm" class="mt-4"/>
+
+                            <table class="table-auto border-collapse">
+                                <thead>
+                                    <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800">
+                                        <th class="px-2 py-2 text-left hidden md:table-cell">Nome</th>
+                                        <th class="px-2 py-2 text-right hidden md:table-cell">Lugar</th>
+                                        <th class="px-2 py-2 text-right hidden md:table-cell">Teatro</th>
+                                        <th class="px-2 py-2 text-right hidden md:table-cell">Preço</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($cart as $cartItem)
+                                <tr class="border-b border-b-gray-400 dark:border-b-gray-500">
+                                    <td class="px-2 py-2 text-right hidden md:table-cell">{{ $cartItem['Screening']->movie->title }}</td>
+                                    <td class="px-2 py-2 text-right hidden md:table-cell">{{ $cartItem['Seat']->lugar }}</td>
+                                    <td class="px-2 py-2 text-right hidden md:table-cell">{{ $cartItem['Screening']->theater->name }}</td>
+                                    <td class="px-2 py-2 text-right hidden md:table-cell">{{ $cartItem['price'] }}</td>
+                                </tr>
+                            @endforeach
+                                </tbody>
+                            </table>    
+                            <x-button element="submit" type="dark" text="Confirm" class="mt-4"/>
                         </form>
                     </div>
                     <div>
