@@ -36,15 +36,20 @@ Route::delete('users/{user}/photo', [UserController::class, 'destroyPhoto'])->na
 Route::put('users/{user}/updatePhoto', [UserController::class, 'updatePhoto'])->name('users.updatePhoto');
 
 //Screenings
-Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
 Route::get('screenings', [ScreeningController::class, 'index'])->name('screenings.index');
-Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
 Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
 Route::put('screenings/{screening}/update', [ScreeningController::class, 'update'])->name('screenings.update');
-Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
-
-
 Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
+
+Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+Route::get('screenings/{screening}/control', [ScreeningController::class, 'control'])->name('screenings.control');
+Route::get('screenings/ticket/{ticketCode}/verify', [ScreeningController::class, 'verifyTicket'])->name('screenings.verifyTicket');
+Route::post('screenings/{screening}/control/enableControl', [ScreeningController::class, 'enableControl'])->name('screenings.enableControl');
+Route::post('screenings/{screening}/control/disableControl', [ScreeningController::class, 'disableControl'])->name('screenings.disableControl');
+
+Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
+
 
 //Theaters
 

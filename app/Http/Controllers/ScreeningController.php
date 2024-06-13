@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Carbon\Carbon;
 use App\Models\Screening;
 use App\Models\Theater;
+use App\Models\Ticket;
+use Illuminate\Support\Facades\Session;
 
 class ScreeningController extends Controller
 {
@@ -60,6 +62,56 @@ class ScreeningController extends Controller
             return view('screenings.create', compact('screening', 'allTheaters'));
         }
 
+        public function control(Screening $screening): View
+        {
+            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+
+            return view('screenings.control', compact('screening', 'allTheaters'));
+        }
+
+        public function verifyTicket(Request $request)
+        {
+            if (!session()->has('screeningIdToControl') || session('screeningIdToControl') == null){
+                return redirect()->route('home.show');
+            }
+
+            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+
+            $ticket = Ticket::where('qrcode_url', $request->ticketCode)->first();
+
+            $screening = Screening::find(session('screeningIdToControl'));
+
+            return view('screenings.control', compact('screening', 'allTheaters', 'ticket'));
+        }
+
+        public function enableControl(Request $request) : View
+        {
+
+            Session::put('screeningIdToControl', $request->screening);
+
+            $screening = Screening::find($request->screening);
+
+            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+
+            return view('screenings.control', compact('screening', 'allTheaters'));
+        }
+
+        public function disableControl(Request $request) : View
+        {
+
+            Session::forget('screeningIdToControl');
+
+            $screening = Screening::find($request->screening);
+
+            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+
+            return view('screenings.control', compact('screening', 'allTheaters'));
+        }
+
         public function edit(Screening $screening)
         {
 
@@ -96,7 +148,6 @@ class ScreeningController extends Controller
 
         public function store(): RedirectResponse
         {
-
             $htmlMessage = "Operação realizada com sucesso!";
             return redirect()->route('screenings.index')
                 ->with('alert-type', 'success')
@@ -134,5 +185,4 @@ class ScreeningController extends Controller
 
             return view('screenings.seats', compact('screening', 'seats'));
         }
-
     }
