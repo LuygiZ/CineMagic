@@ -44,9 +44,9 @@ Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])
 
 Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
 Route::get('screenings/{screening}/control', [ScreeningController::class, 'control'])->name('screenings.control');
-Route::get('screenings/ticket/{ticketCode}/verify', [ScreeningController::class, 'verifyTicket'])->name('screenings.verifyTicket');
-Route::post('screenings/{screening}/control/enableControl', [ScreeningController::class, 'enableControl'])->name('screenings.enableControl');
-Route::post('screenings/{screening}/control/disableControl', [ScreeningController::class, 'disableControl'])->name('screenings.disableControl');
+Route::get('screenings/ticket/verify', [ScreeningController::class, 'verifyTicket'])->name('screenings.verifyTicket');
+Route::post('screenings/{screening}/control', [ScreeningController::class, 'changeControl'])->name('screenings.changeControl');
+Route::post('screenings/{screening}/ticket/{ticket}/accept', [ScreeningController::class, 'acceptTicket'])->name('screenings.acceptTicket');
 
 Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
 
