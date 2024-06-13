@@ -64,6 +64,11 @@ class ScreeningController extends Controller
 
         public function control(Screening $screening): View
         {
+
+            if (session()->has('screeningIdToControl')){
+                session()->put('screeningIdToControl', $screening->id);
+            }
+
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
             $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
 
@@ -83,13 +88,21 @@ class ScreeningController extends Controller
 
             $screening = Screening::find(session('screeningIdToControl'));
 
+            if($ticket == null){
+                $ticket = 0;
+            }
+
             return view('screenings.control', compact('screening', 'allTheaters', 'ticket'));
         }
 
-        public function enableControl(Request $request) : View
+        public function changeControl(Request $request) : View
         {
 
-            Session::put('screeningIdToControl', $request->screening);
+            if (!session()->has('screeningIdToControl') || session('screeningIdToControl') == null){
+                Session::put('screeningIdToControl', $request->screening);
+            }else{
+                Session::forget('screeningIdToControl');
+            }
 
             $screening = Screening::find($request->screening);
 
@@ -99,18 +112,25 @@ class ScreeningController extends Controller
             return view('screenings.control', compact('screening', 'allTheaters'));
         }
 
-        public function disableControl(Request $request) : View
+        public function acceptTicket(Request $request): RedirectResponse
         {
-
-            Session::forget('screeningIdToControl');
+            $ticket = Ticket::find($request->ticket);
+            $ticket->status = "invalid";
+            $ticket->update();
 
             $screening = Screening::find($request->screening);
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
             $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
 
-            return view('screenings.control', compact('screening', 'allTheaters'));
+            $htmlMessage = "O Bilhete Foi Aceite com sucesso!";
+
+            return redirect()->route('screenings.control', ['screening' => $screening])
+                ->with('alert-type', 'success')
+                ->with('alert-msg', $htmlMessage);
         }
+
+
 
         public function edit(Screening $screening)
         {

@@ -4,7 +4,7 @@
 
 @section('main')
 
-    <div class="flex justify-center">
+    <div class="flex justify-center ">
         <div
             class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50">
 
@@ -13,33 +13,39 @@
 
             @if (!session()->has('screeningIdToControl') || session('screeningIdToControl') == null)
 
-            <form method="POST" action="{{ route('screenings.enableControl', $screening->id) }}">
-                @csrf
-                <x-button element="submit" class="mt-5" text="Inicial Controlo de sessão" type="success" />
-            </form>
-
+                <form method="POST" action="{{ route('screenings.changeControl', $screening->id) }}">
+                    @csrf
+                    <x-button element="submit" class="mt-5" text="Inicial Controlo de sessão" type="success" />
+                </form>
             @else
-            <form method="POST" action="{{ route('screenings.disableControl', $screening->id) }}">
-                @csrf
-                <x-button element="submit" class="mt-5" text="Terminar Controlo de sessão" type="danger" />
-            </form>
+                <form method="POST" action="{{ route('screenings.changeControl', $screening->id) }}">
+                    @csrf
+                    <x-button element="submit" class="mt-5" text="Terminar Controlo de sessão" type="danger" />
+                </form>
                 <div class="mt-5">
-                    <form method="POST" action="#">
+                    <form method="GET" action="{{ route('screenings.verifyTicket') }}">
                         @csrf
-                        @method('GET')
-
-                        <x-field.input name="ticketCode" label="Código do Bilhete"/>
+                        <x-field.input name="ticketCode" label="Código do Bilhete" />
 
                         <div class="flex mt-6">
-                            <x-button element="submit" type="dark" text="Verificar Bilhete" class="uppercase" />
+                            <x-button element="submit" type="dark" name="ticketCode" text="Verificar Bilhete"
+                                class="uppercase" />
                         </div>
                     </form>
                 </div>
 
-                @if (isset($ticket))
-                    @if ($ticket != null)
+                @isset($ticket)
+                    @if (!is_int($ticket))
+
+                        @if ($ticket->screening_id != $screening->id)
+                        <x-alert type="danger" class="mt-5">
+                            O bilhete não pertence a esta sessão!
+                        </x-alert>
+                        @endif
+                        
                         <div class="border p-5 mt-5">
                             <div class="mt-5 text-xl flex items-center  ">
+
 
                                 <div class="p-5 ">
                                     <p class="text-center text-blue-800 font-bold text-xl">Informações do Bilhete</p>
@@ -75,11 +81,16 @@
 
                             </div>
 
-                            @if ($ticket->status == 'valid')
+                            @if ($ticket->status == 'valid' && $ticket->screening_id == $screening->id)
                                 <div class="flex">
-                                    <x-button href="#" text="Aceitar Bilhete" class="px-2" type="success" />
+                                    <form method="POST" action="{{ route('screenings.acceptTicket', ['screening' => $screening, 'ticket' => $ticket]) }}">
+                                        @csrf
+                                        <x-button element="submit" text="Aceitar Bilhete" class="px-2" type="success" />
+                                    </form>
+
                             @endif
-                            <x-button href="{{ route('screenings.control', [$screening->id]) }}" text="Cancelar" class="px-2" type="light" />
+                            <x-button href="{{ route('screenings.control', [$screening->id]) }}" text="Cancelar" class="px-2"
+                                type="light" />
 
                         </div>
                     @else
@@ -87,8 +98,9 @@
                             Bilhete Não Encontrado
                         </x-alert>
                     @endif
-                @endif
+                @endisset
             @endif
+
         </div>
     </div>
 
