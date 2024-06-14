@@ -17,7 +17,7 @@ class Purchase extends Model
         'date',
         'total_price',
         'customer_name',
-        'cuaromer_email',
+        'customer_email',
         'nif',
         'payment_type',
         'payment_ref',

@@ -10,30 +10,40 @@ use App\Models\Seat;
 use App\Models\Screening;
 use App\Models\Ticket;
 use App\Models\Configuration;
+use App\Models\Purchase;
+use App\Http\Requests\PurchaseFormRequest;
 
 class CartController extends Controller
 {
     public function show(): View
     {
         $cart = session('cart');
-
         $totalPrice = 0;
-        if (!empty($cart)) {
-            foreach ($cart as $cartItem) {
-                $totalPrice += $cartItem->price;
-            }
-        }
-        $totalPrice = number_format($totalPrice, 2);
 
-        @debug($cart);
+        if (!empty($cart)) {
+            $totalPrice = $this->getTotalPrice($cart);
+        }
+        
         return view('cart.show', compact('cart', 'totalPrice'));
     }   
 
-    public function buy(): View
+    public function buy(): View | RedirectResponse
     {
+        if (!session()->has('cart')) {
+            return redirect()->route('cart.show');
+        }
+
         $cart = session('cart');
-        $payments = ['Paypal', 'MBWay', 'Credit Card', 'Debit Card'];
-        return view('cart.buy', compact('cart', 'payments'));
+        
+        if (empty($cart)) {
+            return redirect()->route('cart.show');
+        }
+
+        $totalPrice = $this->getTotalPrice($cart);
+
+        $payments = ['PAYPAL' => 'Paypal', 'MBWAY' => 'MBWay', 'VISA' => 'VISA'];
+
+        return view('cart.buy', compact('cart', 'payments', 'totalPrice'));
     }
 
     public function add(Request $request): RedirectResponse
@@ -84,6 +94,17 @@ class CartController extends Controller
         return false;
     }
 
+    private function getTotalPrice(array $cart){
+        $totalPrice = 0;
+        if (!empty($cart)) {
+            foreach ($cart as $cartItem) {
+                $totalPrice += $cartItem->price;
+            }
+        }
+
+        return number_format($totalPrice, 2);
+    }
+
     public function remove(Request $request): RedirectResponse
     {
         $cart = session('cart', []);
@@ -106,14 +127,30 @@ class CartController extends Controller
         
         return redirect()->route('cart.show');
     }
-
-    public function confirm(): RedirectResponse
-    {
-        return redirect()->route('cart.show');
-    }
     
-    public function purchase(): RedirectResponse
+    public function store(PurchaseFormRequest $request): RedirectResponse
     {
+        if (!session()->has('cart')) {
+            return redirect()->route('cart.show');
+        }
+
+        $validatedData = $request->validated();
+        $validatedData['date'] = date('Y-m-d');
+
+        $cart = session('cart');
+
+        $newPurchase = Purchase::create($validatedData);
+        $newPurchase->save();
+
+        foreach($cart as $cartItem) {
+            unset($cartItem->seat);
+            unset($cartItem->screening);
+            $cartItem->status = "valid";
+            $cartItem->purchase_id = $newPurchase->id;
+            $cartItem->save();
+        }
+
+        session()->forget('cart');
         return redirect()->route('cart.show');
     }
 

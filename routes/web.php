@@ -64,7 +64,7 @@ Route::post('cart/confirm', [CartController::class, 'confirm'])->name('cart.conf
 Route::delete('cart/remove/{ticket}', [CartController::class, 'remove'])->name('cart.remove');
 Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('cart/purchase', [CartController::class, 'buy'])->name('cart.buy');
-Route::post('cart/purchase', [CartController::class, 'buy'])->name('cart.purchase');
+Route::post('cart/purchase', [CartController::class, 'store'])->name('cart.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
