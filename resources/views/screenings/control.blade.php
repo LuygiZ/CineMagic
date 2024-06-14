@@ -36,13 +36,12 @@
 
                 @isset($ticket)
                     @if (!is_int($ticket))
-
                         @if ($ticket->screening_id != $screening->id)
                         <x-alert type="danger" class="mt-5">
                             O bilhete não pertence a esta sessão!
                         </x-alert>
                         @endif
-                        
+
                         <div class="border p-5 mt-5">
                             <div class="mt-5 text-xl flex items-center  ">
 

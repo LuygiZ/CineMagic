@@ -24,9 +24,9 @@ class MovieFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' =>         'required|string|max:255', 
-            'genre_code' =>    'required|exists:genres,code', 
-            'year' =>            'required|digits:4', 
+            'title' =>         'required|string|max:255',
+            'genre_code' =>    'required|exists:genres,code',
+            'year' =>            'required|digits:4',
             'synopsis' =>        'required|string',
             'poster_filename' => 'nullable|image|mimes:jpg,jpeg,png',
             'trailer_url' => 'nullable|max:255'

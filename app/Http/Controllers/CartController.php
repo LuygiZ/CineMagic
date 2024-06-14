@@ -23,9 +23,9 @@ class CartController extends Controller
         if (!empty($cart)) {
             $totalPrice = $this->getTotalPrice($cart);
         }
-        
+
         return view('cart.show', compact('cart', 'totalPrice'));
-    }   
+    }
 
     public function buy(): View | RedirectResponse
     {
@@ -34,7 +34,7 @@ class CartController extends Controller
         }
 
         $cart = session('cart');
-        
+
         if (empty($cart)) {
             return redirect()->route('cart.show');
         }
@@ -55,12 +55,12 @@ class CartController extends Controller
         }
 
         $cart = session('cart');
-        $screening = Screening::find($request->input('screening_id')); 
+        $screening = Screening::find($request->input('screening_id'));
         $price = Configuration::getTicketPrice();
 
         foreach ($selectedSeats as $seatId => $value) {
-            $seat = Seat::find($seatId);    
-            
+            $seat = Seat::find($seatId);
+
             if ($seat && !$seat->ocupado && $screening) {
                 if ($this->ticketExists($cart, $seat->id, $screening->id)) {
                     continue;
@@ -69,10 +69,10 @@ class CartController extends Controller
                 $seat->lugar = $seat->row.$seat->seat_number;
 
                 $ticket = new Ticket();
-                $ticket->seat = $seat;    
+                $ticket->seat = $seat;
                 $ticket->screening = $screening;
                 $ticket->price = $price;
-                $ticket->qrcode_url = Str::random(255);
+                $ticket->qrcode_url = Str::random(50);
                 $ticket->screening_id = $screening->id;
                 $ticket->seat_id = $seat->id;
 
@@ -80,10 +80,10 @@ class CartController extends Controller
                 session(['cart' => $cart]);
             }
         }
-        
+
         return redirect()->route('cart.show');
     }
-    
+
     private function ticketExists(array $cart, int $seatId, int $screeningId): bool
     {
         foreach ($cart as $cartItem) {
@@ -118,16 +118,16 @@ class CartController extends Controller
         if (isset($cart[$ticket])) {
             unset($cart[$ticket]);
         }
-        
+
         if (empty($cart)) {
             $this->destroy();
         } else {
             session(['cart' => $cart]);
         }
-        
+
         return redirect()->route('cart.show');
     }
-    
+
     public function store(PurchaseFormRequest $request): RedirectResponse
     {
         if (!session()->has('cart')) {

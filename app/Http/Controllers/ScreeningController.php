@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -10,8 +11,10 @@ use Illuminate\Http\RedirectResponse;
 use Carbon\Carbon;
 use App\Models\Screening;
 use App\Models\Theater;
+use App\Models\Movie;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\ScreeningFormRequest;
 
 class ScreeningController extends Controller
 {
@@ -84,9 +87,15 @@ class ScreeningController extends Controller
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
             $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
 
+            $screening = Screening::find(session('screeningIdToControl'));
+
+            if($request->ticketCode == ""){
+                $ticket = 0;
+                return view('screenings.control', compact('screening', 'allTheaters', 'ticket'));
+            }
+
             $ticket = Ticket::where('qrcode_url', $request->ticketCode)->first();
 
-            $screening = Screening::find(session('screeningIdToControl'));
 
             if($ticket == null){
                 $ticket = 0;
@@ -166,8 +175,28 @@ class ScreeningController extends Controller
                 ->with('alert-msg', $htmlMessage);
         }
 
-        public function store(): RedirectResponse
+        public function store(ScreeningFormRequest $request): RedirectResponse
         {
+
+            $validatedData = $request->validated();
+
+            $data = \DateTime::createFromFormat('d/m/Y', $validatedData['date']);
+            $hora = \DateTime::createFromFormat('H:i', $validatedData['time']);
+
+            $filme = Movie::where('title', $validatedData['title'])->first();
+
+            $sala = Theater::where('id', $validatedData['theater_id'])->firstOrFail();
+
+            $dias = $validatedData['numDays'] ?? 1;
+            for ($i = 0; $i < $dias; $i++) {
+                Screening::create([
+                    'movie_id' => $filme->id,
+                    'theater_id' => $sala->id,
+                    'date' => date('Y-m-d', strtotime("$data + $i days")),
+                    'start_time' => $hora,
+                ]);
+            }
+
             $htmlMessage = "Operação realizada com sucesso!";
             return redirect()->route('screenings.index')
                 ->with('alert-type', 'success')
