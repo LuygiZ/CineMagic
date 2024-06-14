@@ -9,6 +9,8 @@ class Configuration extends Model
 {
     use HasFactory;
 
+    protected $table = 'configuration';
+
     protected $fillable = [
         'id',
         'ticket_price',
@@ -17,4 +19,10 @@ class Configuration extends Model
     ];
 
     public $timestamps = false;
+
+    public static function getTicketPrice()
+    {
+        $configuration = Configuration::first();
+        return $configuration ? $configuration->ticket_price : null;
+    }
 }

@@ -193,6 +193,9 @@ class ScreeningController extends Controller
             $screeningDate = Carbon::parse($screening->date);
             $hasScreeningPassed = $screeningDate->isPast();
 
+            $seats->maxRow = $seats->max('row');
+            $seats->maxSeatNumber = $seats->max('seat_number');
+
             foreach($seats as $seat){
                 /*if($hasScreeningPassed)
                 {

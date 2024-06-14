@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use App\Models\Seat;
 use App\Models\Screening;
 use App\Models\Ticket;
+use App\Models\Configuration;
 
 class CartController extends Controller
 {
@@ -20,7 +21,6 @@ class CartController extends Controller
 
     public function add(Request $request): RedirectResponse
     {
-        session()->forget('cart');
         $selectedSeats = $request->input('check', []);
 
         if (!session()->has('cart')) {
@@ -28,19 +28,24 @@ class CartController extends Controller
         }
 
         $cart = session('cart');
-
         $screening = Screening::find($request->input('screening_id')); 
+        $price = Configuration::getTicketPrice();
 
         foreach ($selectedSeats as $seatId => $value) {
             $seat = Seat::find($seatId);    
             
             if ($seat && !$seat->ocupado && $screening) {
+
+                if ($this->ticketExists($cart, $seat->id, $screening->id)) {
+                    continue;
+                }
+
                 $seat->lugar = $seat->row.$seat->seat_number;
 
                 $ticket = new Ticket();
                 $ticket->Seat = $seat;    
                 $ticket->Screening = $screening;
-                $ticket->price = 15;
+                $ticket->price = $price;
 
                 $cart[] = $ticket;
                 session(['cart' => $cart]);
@@ -50,8 +55,36 @@ class CartController extends Controller
         return redirect()->route('cart.show');
     }
     
-    public function remove(): RedirectResponse
+    private function ticketExists(array $cart, int $seatId, int $screeningId): bool
     {
+        foreach ($cart as $cartItem) {
+            if ($cartItem->Seat->id === $seatId && $cartItem->Screening->id === $screeningId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function remove(Request $request): RedirectResponse
+    {
+        $cart = session('cart', []);
+
+        if (!session()->has('cart')) {
+            return redirect()->route('cart.show');
+        }
+
+        $ticket = $request->ticket;
+
+        if (isset($cart[$ticket])) {
+            unset($cart[$ticket]);
+        }
+        
+        if (empty($cart)) {
+            $this->destroy();
+        } else {
+            session(['cart' => $cart]);
+        }
+        
         return redirect()->route('cart.show');
     }
 
