@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Gerir Sessões')
+@section('header-title', 'Manage Screenings')
 
 @section('main')
 <div class="flex justify-center">
@@ -18,7 +18,7 @@
         <div class="flex items-center gap-4 mb-4">
             <x-button
                 href="{{route('screenings.create')}}"
-                text="Criar nova sessão"
+                text="Create New Screening"
                 type="success"/>
             </div>
         <div class="font-base text-sm text-gray-700 dark:text-gray-30">

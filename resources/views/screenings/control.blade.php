@@ -1,34 +1,33 @@
 @extends('layouts.main')
 
-@section('header-title', 'Controlar Sessão')
+@section('header-title', 'Control Screening')
 
 @section('main')
 
     <div class="flex justify-center ">
         <div
             class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50">
-
-            <h1 class="text-2xl">Informações da Sessão</h1>
+            <h1 class="text-2xl">Screening Information</h1>
             @include('screenings.shared.fields', ['mode' => 'show'])
 
             @if (!session()->has('screeningIdToControl') || session('screeningIdToControl') == null)
 
                 <form method="POST" action="{{ route('screenings.changeControl', $screening->id) }}">
                     @csrf
-                    <x-button element="submit" class="mt-5" text="Inicial Controlo de sessão" type="success" />
+                    <x-button element="submit" class="mt-5" text="Start Session Control" type="success" />
                 </form>
             @else
                 <form method="POST" action="{{ route('screenings.changeControl', $screening->id) }}">
                     @csrf
-                    <x-button element="submit" class="mt-5" text="Terminar Controlo de sessão" type="danger" />
+                    <x-button element="submit" class="mt-5" text="End Session Control" type="danger" />
                 </form>
                 <div class="mt-5">
                     <form method="GET" action="{{ route('screenings.verifyTicket') }}">
                         @csrf
-                        <x-field.input name="ticketCode" label="Código do Bilhete" />
+                        <x-field.input name="ticketCode" label="Ticket Code" />
 
                         <div class="flex mt-6">
-                            <x-button element="submit" type="dark" name="ticketCode" text="Verificar Bilhete"
+                            <x-button element="submit" type="dark" name="ticketCode" text="Verify Ticket"
                                 class="uppercase" />
                         </div>
                     </form>
@@ -38,7 +37,7 @@
                     @if (!is_int($ticket))
                         @if ($ticket->screening_id != $screening->id)
                         <x-alert type="danger" class="mt-5">
-                            O bilhete não pertence a esta sessão!
+                            The ticket does not belong to this session!
                         </x-alert>
                         @endif
 
@@ -48,24 +47,24 @@
 
                                 <div class="p-5 ">
                                     <p class="text-center text-blue-800 font-bold text-xl">Informações do Bilhete</p>
-                                    <p><strong>Filme:</strong> {{ $ticket->screening->movie->title }}</p>
-                                    <p><strong>Data e hora:</strong> {{ $ticket->screening->date }} -
+                                    <p><strong>Movie:</strong> {{ $ticket->screening->movie->title }}</p>
+                                    <p><strong>Date and Time:</strong> {{ $ticket->screening->date }} -
                                         {{ $ticket->screening->start_time }}</p>
-                                    <p><strong>Preço:</strong> {{ $ticket->price }}€</p>
-                                    <p><strong>Estado do Bilhete:</strong>
+                                    <p><strong>Price:</strong> {{ $ticket->price }}€</p>
+                                    <p><strong>Ticket State:</strong>
                                         <span
                                             style="color: white; background-color: {{ $ticket->status == 'valid' ? 'green' : 'red' }}; padding: 2px 5px; border-radius: 3px;">
-                                            {{ $ticket->status == 'valid' ? 'Válido' : 'Inválido' }}
+                                            {{ $ticket->status == 'valid' ? 'Valid' : 'Invalid' }}
                                         </span>
                                     </p>
 
                                     <br>
-                                    <p class="text-center text-blue-800 font-bold text-xl">Informações do Cliente</p>
-                                    <p><strong>Nome:</strong> {{ $ticket?->purchase?->customer_name ?? ' ---' }}</p>
+                                    <p class="text-center text-blue-800 font-bold text-xl">Customer Information</p>
+                                    <p><strong>Name:</strong> {{ $ticket?->purchase?->customer_name ?? ' ---' }}</p>
                                     <br>
-                                    <p class="text-center text-blue-800 font-bold text-xl">Lugar</p>
-                                    <p><strong>Linha do lugar:</strong> {{ $ticket->seat->row }}</p>
-                                    <p><strong>Número do lugar:</strong> {{ $ticket->seat->seat_number }}</p>
+                                    <p class="text-center text-blue-800 font-bold text-xl">Seat Information</p>
+                                    <p><strong>Row:</strong> {{ $ticket->seat->row }}</p>
+                                    <p><strong>Seat Number:</strong> {{ $ticket->seat->seat_number }}</p>
                                 </div>
 
                                 <div>
@@ -88,13 +87,13 @@
                                     </form>
 
                             @endif
-                            <x-button href="{{ route('screenings.control', [$screening->id]) }}" text="Cancelar" class="px-2"
+                            <x-button href="{{ route('screenings.control', [$screening->id]) }}" text="Cancel" class="px-2"
                                 type="light" />
 
                         </div>
                     @else
                         <x-alert type="danger" class="mt-5">
-                            Bilhete Não Encontrado
+                            Ticket Not Found
                         </x-alert>
                     @endif
                 @endisset

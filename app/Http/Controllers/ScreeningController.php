@@ -45,7 +45,7 @@ class ScreeningController extends Controller
                 $screeningsQuery->where('date', $filterByDate);
             }
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             $allScreenings = $screeningsQuery
                 ->paginate(20)
@@ -59,7 +59,7 @@ class ScreeningController extends Controller
             $screening = new Screening();
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
 
             return view('screenings.create', compact('screening', 'allTheaters'));
@@ -145,7 +145,7 @@ class ScreeningController extends Controller
         {
 
             if ($screening->tickets()->exists()) {
-                $htmlMessage = "A sessão não pode ser editada! (possui bilhetes)";
+                $htmlMessage = "The session cannot be edited! (has tickets)";
                 return redirect()->route('screenings.index')
                     ->with('alert-type', 'danger')
                     ->with('alert-msg', $htmlMessage);
@@ -162,7 +162,7 @@ class ScreeningController extends Controller
         {
 
             if ($screening->tickets()->exists()) {
-                $htmlMessage = "A sessão não pode ser apagada! (possui bilhetes)";
+                $htmlMessage = "The session cannot be deleted! (has tickets)";
                 return redirect()->route('screenings.index')
                     ->with('alert-type', 'danger')
                     ->with('alert-msg', $htmlMessage);
@@ -197,22 +197,36 @@ class ScreeningController extends Controller
                 ]);
             }
 
-            $htmlMessage = "Operação realizada com sucesso!";
+            $htmlMessage = "Operation carried out successfully!";
             return redirect()->route('screenings.index')
                 ->with('alert-type', 'success')
                 ->with('alert-msg', $htmlMessage);
         }
 
-        public function update(Screening $screening): RedirectResponse
+        public function update(ScreeningFormRequest $request, Screening $screening): RedirectResponse
         {
-           // $validatedData = $request->validated();
+            $validatedData = $request->validated();
 
-            $url = route('screenings.edit', ['screening' => $screening]);
-            $htmlMessage = "Sessão atualizada com sucesso!";
+            $data = \DateTime::createFromFormat('Y-m-d', $validatedData['date']);
+            $hora = \DateTime::createFromFormat('H:i', $validatedData['time']);
+
+            $filme = Movie::where('title', $validatedData['title'])->first();
+
+            $sala = Theater::where('id', $validatedData['theater_id'])->firstOrFail();
+
+            $screening->update([
+                'movie_id' => $filme->id,
+                'theater_id' => $sala->id,
+                'date' => $data,
+                'start_time' => $hora
+            ]);
+
+            $htmlMessage = "Session updated successfully!";
             return redirect()->route('screenings.index')
                 ->with('alert-type', 'success')
                 ->with('alert-msg', $htmlMessage);
         }
+
 
         public function seats($screening): View
         {
@@ -235,6 +249,9 @@ class ScreeningController extends Controller
                 $seat->ocupado = $screening->tickets->contains('seat_id', $seat->id);
             }
 
-            return view('screenings.seats', compact('screening', 'seats'));
+            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+
+            return view('screenings.seats', compact('screening', 'seats', 'allTheaters'));
         }
     }

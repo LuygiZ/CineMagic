@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Theater;
-use App\Models\Screening;
+use App\Models\Seat;
 use Illuminate\View\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ class TheaterController extends Controller
     {
         $filterByName = $request->query('name');
 
-        $filterAction = route('theater.index'); 
+        $filterAction = route('theater.index');
 
         $theaterQuery = Theater::query();
 
@@ -56,14 +56,23 @@ class TheaterController extends Controller
     // Create seats for the theater
     $rows = $validated['rows'];
     $seatsPerRow = $validated['seats_per_row'];
+
+    $letters = range('A', 'Z'); // Array com letras de A a Z
+    $rowIndex = 0;
+
     for ($row = 1; $row <= $rows; $row++) {
+        $currentLetter = $letters[$rowIndex];
+
         for ($seat = 1; $seat <= $seatsPerRow; $seat++) {
-            $newTheater->seats()->create([
-                'row' => $row,
+            Seat::Create([
+                'theater_id' => $newTheater->id,
+                'row' => $currentLetter,
                 'seat_number' => $seat,
             ]);
         }
+        $rowIndex++;
     }
+
 
     $url = route('theater.show', ['theater' => $newTheater]);
     $htmlMessage = "Teatro <a href='$url'><u>{$newTheater->name}</u></a> foi criado com sucesso!";

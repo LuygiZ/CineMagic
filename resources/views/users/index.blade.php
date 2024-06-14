@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Gerenciar Utilizadores')
+@section('header-title', 'Manage Users')
 
 @section('main')
 <div class="flex justify-center">
@@ -8,7 +8,7 @@
         <x-users.filterCard
             filterAction="{{ route('users.index') }}"
             resetUrl="{{ route('users.index') }}"
-            :types="[null => 'Qualquer Tipo', 'A' => 'Administrador', 'E' => 'Empregado', 'C' => 'Cliente']"
+            :types="[null => 'Any Type', 'A' => 'Administrator', 'E' => 'Employee', 'C' => 'Customer']"
             :type="old('type', $filterByType)"
             :blocked="old('blocked', $filterByBlocked)"
             :name="old('name', $filterByName)"
@@ -18,7 +18,7 @@
         <div class="flex items-center gap-4 mb-4">
             <x-button
                 href="{{route('users.create')}}"
-                text="Criar um novo utilizador"
+                text="Create new User"
                 type="success"/>
             </div>
         <div class="font-base text-sm text-gray-700 dark:text-gray-30">

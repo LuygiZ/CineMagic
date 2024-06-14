@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Nova Sessão')
+@section('header-title', 'New Screening')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -9,7 +9,7 @@
             <section>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                       Nova Sessão
+                        New Screening
                     </h2>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300  mb-6">
                         Click on "Save" button to store the information.
@@ -20,7 +20,7 @@
                     @csrf
                     @include('screenings.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">
-                        <x-button element="submit" type="dark" text="Criar nova Sessão" class="uppercase"/>
+                        <x-button element="submit" type="dark" text="Create New Screening" class="uppercase"/>
                     </div>
                 </form>
             </section>

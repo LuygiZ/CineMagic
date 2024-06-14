@@ -2,12 +2,12 @@
     <table class="table-auto border-collapse m-auto">
         <thead>
         <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800">
-            <th class="px-2 py-2 text-center hidden lg:table-cell">Filme</th>
-            <th class="px-2 py-2 text-center">Data</th>
-            <th class="px-2 py-2 text-center">Sala</th>
-            <th class="px-2 py-2 text-center">Hora de inicio</th>
+            <th class="px-2 py-2 text-center hidden lg:table-cell">Movie</th>
+            <th class="px-2 py-2 text-center">Date</th>
+            <th class="px-2 py-2 text-center">Theater</th>
+            <th class="px-2 py-2 text-center">Start Time</th>
             <th></th>
-            
+
             @if($showEdit)
                 <th></th>
             @endif

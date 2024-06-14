@@ -6,13 +6,13 @@
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
 
-        <x-field.input name="title" label="Nome do filme" :readonly="$readonly"
+        <x-field.input name="title" label="Movie Name" :readonly="$readonly"
             value="{{ old('title', $screening->movie ? $screening->movie->title : '') }}" />
 
-        <x-field.select name="theater_id" label="Sala" value="{{ old('theater_id', $screening->theater_id) }}"
+        <x-field.select name="theater_id" label="Theater" value="{{ old('theater_id', $screening->theater_id) }}"
             :options="$allTheaters" :readonly="$readonly" />
 
-        <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Data:</label>
+        <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Date:</label>
         <div class="relative max-w-sm">
 
             <input datepicker datepicker-autohide type="date" value="{{ old('date', $screening->date) }}"
@@ -32,7 +32,7 @@
             @enderror
         </div>
 
-        <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Hora:</label>
+        <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Time:</label>
         <div class=" relative max-w-sm">
             <input type="time" id="time" name="time" value="{{ old('time', $screening->start_time) }}"
                 class="border-gray-300
@@ -52,7 +52,7 @@
 
         @if ($mode == 'create')
             <x-field.input type="number" name="numDays" class="max-w-sm"
-                label="Registar sessões nos proximos dias pela mesma hora (inserir numero de dias)" :readonly="$readonly" />
+                label="Register sessions in the next days at the same time (insert number of days)" :readonly="$readonly" />
         @endif
     </div>
 

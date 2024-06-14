@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserFormRequest;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -60,7 +60,7 @@ class UserController extends Controller
         return view('users.create')->with('user', $newUser);
     }
 
-    public function store(UserRequest $request): RedirectResponse
+    public function store(UserFormRequest $request): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -91,23 +91,28 @@ class UserController extends Controller
             });
 
         }else{
-            $newUser = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'type' => $request->type,
-                'blocked' => $request->blocked,
-                'password' => Hash::make($request->password),
-            ]);
+            $newUser = DB::transaction(function () use ($validatedData, $request) {
 
-            if ($request->hasFile('photo_file')) {
-                $path = $request->photo_file->store('public/photos');
-                $newUser->photo_filename = basename($path);
-                $newUser->save();
-            }
+                $newUser = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'type' => $request->type,
+                    'blocked' => $request->blocked,
+                    'password' => Hash::make($request->password),
+                ]);
+
+                if ($request->hasFile('photo_file')) {
+                    $path = $request->photo_file->store('public/photos');
+                    $newUser->photo_filename = basename($path);
+                    $newUser->save();
+                }
+                return $newUser;
+            });
+
+
         }
 
-        $url = route('users.show', ['user' => $newUser]);
-        $htmlMessage = "User <a href='$url'><u>{$newUser->name}</u></a> foi criado com sucesso!";
+        $htmlMessage = "User $newUser->name has been created successfully!";
         return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -116,30 +121,27 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         if($user == Auth::user()){
-            $url = route('users.index');
-            $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado (utilizador atual)!";
+            $htmlMessage = "User $user->name cannot be deleted (current user)!";
             return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
         }
 
         if($user->type == 'C'){
-            $url = route('users.index');
-            $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> não pode ser apagado! (cliente)";
+            $htmlMessage = "User {$user->name} cannot be deleted (client)";
             return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
         }
 
         $user->delete();
-        $url = route('users.index');
-        $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> foi apagado com sucesso!";
+        $htmlMessage = "User {$user->name} has been deleted successfully!";
         return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
 
-    public function update(UserRequest $request, User $user): RedirectResponse
+    public function update(UserFormRequest $request, User $user): RedirectResponse
     {
         $validatedData = $request->validated();
 
@@ -164,8 +166,7 @@ class UserController extends Controller
             }
         });
 
-        $url = route('users.show', ['user' => $user]);
-        $htmlMessage = "Utilizador <a href='$url'><u>{$user->name}</u></a> atualizado com sucesso!";
+        $htmlMessage = "User $user->name updated successfully!";
         return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -175,8 +176,7 @@ class UserController extends Controller
     public function updateBlocked(Request $request, $id)
     {
         if($id == Auth::user()->id){
-            $url = route('users.index');
-            $htmlMessage = "Nao é possivel bloquear o próprio utilizador";
+            $htmlMessage = "It is not possible to block the user himself";
             return redirect()->route('users.index')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg', $htmlMessage);
@@ -186,8 +186,7 @@ class UserController extends Controller
         $user->blocked = $request->input('blocked');
         $user->save();
 
-        $url = route('users.show', ['user' => $user]);
-        $htmlMessage = "User <a href='$url'><u>{$user->name}</u></a> está agora " . ($user->blocked ? 'bloqueado' : 'desbloqueado') . "!";
+        $htmlMessage = "User $user->name is now " . ($user->blocked ? 'blocked' : 'active') . "!";
         return redirect()->route('users.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -203,12 +202,12 @@ class UserController extends Controller
             $user->save();
         return redirect()->back()
             ->with('alert-type', 'success')
-            ->with('alert-msg', "Foto do utilizador {$user->name} foi apagada com sucesso.");
+            ->with('alert-msg', "Photo from user {$user->name} deleted successfully");
         }
         return redirect()->back();
     }
 
-    public function updatePhoto(UserRequest $request, User $user)
+    public function updatePhoto(UserFormRequest $request, User $user)
     {
 
         if ($request->hasFile('photo_file')) {

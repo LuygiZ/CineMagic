@@ -3,25 +3,25 @@
         <div class="flex justify-between space-x-3">
             <div class="grow flex flex-col space-y-2">
                 <div>
-                    <x-field.input name="name" label="Nome" class="grow"
+                    <x-field.input name="name" label="Name" class="grow"
                     value="{{ $name }}"/>
 
                 </div>
                 <div class="flex space-x-3">
-                    <x-field.select name="type" label="Tipo de Utilizador"
+                    <x-field.select name="type" label="Type of User"
                     value="{{ $type }}"
                     :options="$types"/>
-                    <x-field.select name="blocked" label="Estado da conta"
+                    <x-field.select name="blocked" label="Account State"
                     value="{{ $blocked }}"
-                    :options="[null => 'Qualquer Estado', '0' => 'Ativo', '1' => 'Bloqueado']"/>
+                    :options="[null => 'Any State', '0' => 'Active', '1' => 'Blocked']"/>
                 </div>
             </div>
             <div class="grow-0 flex flex-col space-y-3 justify-start">
                 <div class="pt-6">
-                    <x-button element="submit" type="dark" text="Filtrar"/>
+                    <x-button element="submit" type="dark" text="Filter"/>
                 </div>
                 <div>
-                    <x-button element="a" type="light" text="Cancelar" :href="$resetUrl"/>
+                    <x-button element="a" type="light" text="Cancel" :href="$resetUrl"/>
                 </div>
             </div>
         </div>

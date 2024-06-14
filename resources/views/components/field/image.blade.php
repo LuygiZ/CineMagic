@@ -63,7 +63,7 @@
                             focus:bg-gray-900 dark:focus:bg-gray-100
                             active:bg-gray-950 dark:active:bg-gray-50
                             cursor-pointer"
-                        >Escolher Foto</label>
+                        >Choose Photo</label>
                         <label id="id_{{ $name }}_selected_file"
                             class="text-sm text-slate-500 truncate"></label>
                     </div>

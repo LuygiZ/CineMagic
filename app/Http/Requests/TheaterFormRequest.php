@@ -25,7 +25,7 @@ class TheaterFormRequest extends FormRequest
 {
     return [
         'name' => 'required|string|max:255',
-        'rows' => 'required|integer|min:1',
+        'rows' => 'required|integer|min:1|max:25',
         'seats_per_row' => 'required|integer|min:1',
         'photo_filename' => 'nullable|image|max:2048',
     ];

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Gerenciar Utilizador')
+@section('header-title', 'Manage Users')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -10,7 +10,7 @@
                 <div class="flex flex-wrap justify-end items-center gap-4 mb-4">
                     <x-button
                         href="{{ route('users.edit', ['user' => $user]) }}"
-                        text="Editar User"
+                        text="Edit User"
                         type="primary"/>
                     <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
                                     href="{{ route('users.index') }}"/>

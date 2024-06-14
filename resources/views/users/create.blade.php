@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Novo Utlizador')
+@section('header-title', 'Create User')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -21,7 +21,7 @@
                     @csrf
                     @include('users.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">
-                        <x-button element="submit" type="dark" text="Guardar novo User" class="uppercase"/>
+                        <x-button element="submit" type="dark" text="Save New User" class="uppercase"/>
                     </div>
                 </form>
             </section>
