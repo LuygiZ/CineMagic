@@ -32,34 +32,32 @@
 
                     <!-- Menu Items -->
                     <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
-                    invisible h-0 sm:visible sm:h-auto">
+                    invisible h-0 sm:visible sm:h-auto z-10">
                         <!-- Menu Item: Movies -->
                         <x-menus.menu-item
                             content="Movies"
                             href="{{ route('movies.index') }}"
-                            selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 
                         <x-menus.menu-item
                         content="Screenings"
                         href="{{ route('screenings.index') }}"
-                        selected="{{ Route::currentRouteName() == 'courses.showcase'}}"
                         />
 
                         @auth
-                        <!-- Menu Item: Teachers -->
+                        <!-- Menu Item: Theaters -->
                         <x-menus.menu-item
-                            content="Teachers"
+                            content="Theaters"
                             selectable="1"
-                            href="#"
-                            selected="{{ Route::currentRouteName() == 'teachers.index'}}"
+                            href="{{ route('theater.index') }}"
+                            selected="{{ Route::currentRouteName() == 'theater.index'}}"
                             />
 
-                        <!-- Menu Item: Others -->
+                        <!-- Menu Item: Administração -->
                         <x-menus.submenu
                             selectable="0"
                             uniqueName="submenu_others"
-                            content="More">
+                            content="Administration">
                                 @can('viewAny', App\Models\Student::class)
                                 <x-menus.submenu-item
                                     content="Students"
@@ -67,16 +65,24 @@
                                     href="{{ route('students.index') }}" />
                                 @endcan
                                 <x-menus.submenu-item
-                                    content="Administratives"
+                                    content="Genres"
                                     selectable="0"
                                     href="#" />
-                                <hr>
                                 <x-menus.submenu-item
-                                    content="Departments"
+                                    content="Theaters"
                                     selectable="0"
                                     href="#"/>
                                 <x-menus.submenu-item
-                                    content="Course Management"
+                                    content="Customers"
+                                    href="#"/>
+                                <x-menus.submenu-item
+                                    content="Movies"
+                                    href="#"/>
+                                <x-menus.submenu-item
+                                    content="Purchases"
+                                    href="#"/>
+                                <x-menus.submenu-item
+                                    content="Statistics"
                                     href="#"/>
                         </x-menus.submenu>
                         @endauth
@@ -102,7 +108,7 @@
                                 </div>
                             </x-slot>
                             <x-menus.submenu-item
-                                content="Gerir Utilizadores"
+                                content="User Management"
                                 selectable="0"
                                 href="{{ route('users.index') }}"/>
                             <x-menus.submenu-item
@@ -177,6 +183,8 @@
                 @yield('main')
             </div>
         </main>
+    </div>
+</body>
 
 <!-- Footer -->
 <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-8">
@@ -213,3 +221,5 @@
     </div>
 </footer>
 
+
+</html>

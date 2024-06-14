@@ -3,10 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScreeningController;
+use App\Http\Controllers\GenreController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -19,6 +21,7 @@ Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
 // Route::put('movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
 // Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
+//Movies
 Route::resource('movies', MovieController::class);
 
 //Manage Users
@@ -51,8 +54,10 @@ Route::post('screenings/{screening}/ticket/{ticket}/accept', [ScreeningControlle
 Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
 
 //Theaters
+Route::resource('theater', TheaterController::class);
 
 //Genres
+Route::resource('genres', GenreController::class);
 
 //Pdf
 Route::get('generatePdf', [PdfController::class, 'generatePdf']);

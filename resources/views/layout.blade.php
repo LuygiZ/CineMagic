@@ -47,7 +47,7 @@
                 <a href="{{ route('movies.index') }}">Movies</a>
             </li>
             <li>
-                <a href="{{ route('disciplines.index') }}">Disciplines</a>
+                <a href="{{ route('disciplines.index') }}">Screenings</a>
             </li>
         </ul>
     </nav>

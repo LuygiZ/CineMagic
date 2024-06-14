@@ -132,8 +132,8 @@ class MovieController extends Controller
                 $alertType = 'warning';
                 $justification = match (true) {
                     $totalMovieScreenings <= 0 => "",
-                    $totalMovieScreenings == 1 => "Existe 1 sessão para este filme",
-                    $totalMovieScreenings > 1 => "Existem $totalMovieScreenings sessões para este filme",
+                    $totalMovieScreenings == 1 => "There is 1 session for this movie",
+                    $totalMovieScreenings > 1 => "There is $totalMovieScreenings sessions for this movie",
                 };
                 $alertMsg = "Movie <a href='$url'><u>{$movie->title}</u></a> cannot be deleted because $justification.";
             }
@@ -153,4 +153,5 @@ class MovieController extends Controller
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
         return view('movies.show', compact('genres','movie'));
     }
+
 }
