@@ -36,6 +36,7 @@
                         <!-- Menu Item: Movies -->
                         <x-menus.menu-item
                             content="Movies"
+                            selected="{{ Route::currentRouteName() == 'movies.index'}}"
                             href="{{ route('movies.index') }}"
                         />
 
@@ -53,39 +54,40 @@
                             selectable="0"
                             uniqueName="submenu_others"
                             content="Administration">
-                                @can('viewAny', App\Models\Student::class)
-                                <x-menus.submenu-item
-                                    content="Students"
-                                    selectable="0"
-                                    href="{{ route('students.index') }}" />
-                                @endcan
                                 <x-menus.submenu-item
                                     content="Genres"
-                                    selectable="0"
-                                    href="#" />
+                                    href="#"/>
                                 <x-menus.submenu-item
                                     content="Theaters"
-                                    selectable="0"
-                                    href="#"/>
-                                <x-menus.submenu-item
-                                    content="Customers"
-                                    href="#"/>
+                                    selected="{{ Route::currentRouteName() == 'theater.index'}}"
+                                    href="{{ route('theater.index') }}"/>
                                 <x-menus.submenu-item
                                     content="Screenings"
+                                    selected="{{ Route::currentRouteName() == 'screenings.index'}}"
                                     href="{{ route('screenings.index') }}"/>
                                 <x-menus.submenu-item
                                     content="User Management"
+                                    selected="{{ Route::currentRouteName() == 'users.index'}}"
                                     href="{{ route('users.index') }}"/>
                                 <x-menus.submenu-item
                                     content="Statistics"
+                                    selected="{{ Route::currentRouteName() == 'statistics.show'}}"
                                     href="{{ route('statistics.show') }}"/>
                                 <x-menus.submenu-item
                                     content="Configurations"
+                                    selected="{{ Route::currentRouteName() == 'configurations.index'}}"
                                     href="{{ route('configurations.index') }}"/>
                         </x-menus.submenu>
                         @endauth
 
                         <div class="grow"></div>
+                        @if (session('cart'))
+                        <x-menus.cart
+                            :href="route('cart.show')"
+                            selectable="1"
+                            selected="{{ Route::currentRouteName() == 'cart.show'}}"
+                            :total="count(session('cart'))"/>
+                        @endif
 
                         @auth
                         <x-menus.submenu

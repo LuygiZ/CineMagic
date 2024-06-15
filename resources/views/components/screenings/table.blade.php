@@ -41,7 +41,6 @@
                 </td>
                 @endif
 
-
                 @if($showEdit)
                     <td  class="text-right">
                         <x-table.icon-edit class="px-2 inline-block"

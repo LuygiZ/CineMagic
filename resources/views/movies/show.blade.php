@@ -8,20 +8,24 @@
         <div class="max-full">
             <section>
                 <header>
+                    @can('employeeOrAdmin')
+                        <div class="flex flex-wrap justify-end items-center gap-4 my-4">
+                            <x-button
+                                href="{{ route('movies.edit', ['movie' => $movie]) }}"
+                                text="Edit Movie"
+                                type="primary"/>
+                            <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
+                                            href="{{ route('movies.index') }}"/>
+                        </div>
+                     @endcan
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                         "{{ $movie->title }}"
                     </h2>
                 </header>
                 @include('movies.shared.fields', ['mode' => 'show'])
             </section>
-            <div class="flex flex-wrap justify-end items-center gap-4 my-4">
-                    <x-button
-                        href="{{ route('movies.edit', ['movie' => $movie]) }}"
-                        text="Edit Movie"
-                        type="primary"/>
-                    <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
-                                    href="{{ route('movies.index') }}"/>
-            </div>
+
+
         </div>
 
         @if ($allScreenings->total())

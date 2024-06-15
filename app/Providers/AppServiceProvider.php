@@ -29,10 +29,11 @@ class AppServiceProvider extends ServiceProvider
           return $user->type == "A" ? true : false;
         });
 
-        Gate::define('customer', function (User $user){
 
-            return $user->type == "C" ? true : false;
+        Gate::define('employeeOrAdmin', function (User $user){
+            return ($user->type == "A" || $user->type == "E") ? true : false;
         });
+        
         // View::share adds data (variables) that are shared through all views (like global data)
 
         try{

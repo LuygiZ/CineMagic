@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             filteredScreenings.forEach(screening => {
                 const option = document.createElement('option');
                 option.value = screening.id;
-                option.textContent = `${screening.date} - Start Time: ${screening.start_time} - Theater ${screening.theater_id}`;
+                option.textContent = `${screening.date} - Start Time: ${screening.start_time} - Theater ${screening.theater.name}`;
                 screeningSelect.appendChild(option);
             });
         }

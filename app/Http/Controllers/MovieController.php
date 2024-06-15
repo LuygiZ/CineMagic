@@ -7,7 +7,7 @@ use App\Models\Movie;
 use App\Models\Screening;
 use Illuminate\View\View;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MovieFormRequest;
 use App\Models\Genre;
@@ -51,26 +51,23 @@ class MovieController extends Controller
     }
 
     public function indexPoster(): View
-{
-    $today = Carbon::today();
-    $twoWeeksFromNow = Carbon::today()->addWeeks(2);
+    {
+        $today = Carbon::today();
+        $twoWeeksFromNow = Carbon::today()->addWeeks(2);
 
-    // Get upcoming screenings within the next two weeks including today
-    $upcomingScreenings = Screening::with('movie')
-        ->whereBetween('date', [$today, $twoWeeksFromNow])
-        ->get();
+        $upcomingScreenings = Screening::with('movie','theater')
+            ->whereBetween('date', [$today, $twoWeeksFromNow])
+            ->get();
 
-    // Extract unique movie IDs from the screenings
-    $movieIds = $upcomingScreenings->pluck('movie_id')->unique();
+        $movieIds = $upcomingScreenings->pluck('movie_id')->unique();
 
-    // Fetch movies corresponding to these IDs
-    $movies = Movie::whereIn('id', $movieIds)->get();
+        $movies = Movie::whereIn('id', $movieIds)->get();
 
-    return view('home')->with([
-        'movies' => $movies,
-        'screenings' => $upcomingScreenings,
-    ]);
-}
+        return view('home')->with([
+            'movies' => $movies,
+            'screenings' => $upcomingScreenings,
+        ]);
+    }
 
 
     public function create(): View
@@ -154,6 +151,11 @@ class MovieController extends Controller
 
     public function show(Movie $movie): View
     {
+
+        if (!Gate::allows('view', $movie)) {
+            return abort(403, 'THIS ACTION IS UNAUTHORIZED.');
+        } 
+
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
 
         $today = Carbon::today();
