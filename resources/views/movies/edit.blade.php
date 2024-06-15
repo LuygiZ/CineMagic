@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Editar Filme')
+@section('header-title', 'Edit Movie')
 
 @section('main')
 <div class="flex flex-col space-y-6">

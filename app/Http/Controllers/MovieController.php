@@ -51,22 +51,26 @@ class MovieController extends Controller
     }
 
     public function indexPoster(): View
-    {
-        $today = Carbon::today();
-        $twoWeeksFromNow = Carbon::today()->addWeeks(2);
+{
+    $today = Carbon::today();
+    $twoWeeksFromNow = Carbon::today()->addWeeks(2);
 
-        // Get upcoming screenings within the next two weeks including today
-        $upcomingScreenings = Screening::with('movie')
-            ->whereBetween('date', [$today, $twoWeeksFromNow])->get();
+    // Get upcoming screenings within the next two weeks including today
+    $upcomingScreenings = Screening::with('movie')
+        ->whereBetween('date', [$today, $twoWeeksFromNow])
+        ->get();
 
-        // Extract unique movie IDs from the screenings
-        $movieIds = $upcomingScreenings->pluck('movie_id')->unique();
+    // Extract unique movie IDs from the screenings
+    $movieIds = $upcomingScreenings->pluck('movie_id')->unique();
 
-        // Fetch movies corresponding to these IDs
-        $movies = Movie::whereIn('id', $movieIds)->get();
+    // Fetch movies corresponding to these IDs
+    $movies = Movie::whereIn('id', $movieIds)->get();
 
-        return view('home')->with('movies', $movies);
-    }
+    return view('home')->with([
+        'movies' => $movies,
+        'screenings' => $upcomingScreenings,
+    ]);
+}
 
 
     public function create(): View

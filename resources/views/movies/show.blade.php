@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Gerenciar Filmes')
+@section('header-title', 'Manage Movies')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -17,9 +17,9 @@
             <div class="flex flex-wrap justify-end items-center gap-4 my-4">
                     <x-button
                         href="{{ route('movies.edit', ['movie' => $movie]) }}"
-                        text="Editar Filme"
+                        text="Edit Movie"
                         type="primary"/>
-                    <x-button element="a" type="light" text="Cancelar" class="uppercase ms-4"
+                    <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
                                     href="{{ route('movies.index') }}"/>
             </div>
         </div>

@@ -22,7 +22,7 @@
                         @method('DELETE')
                         <x-button
                             element="submit"
-                            text="Delete Teather"
+                            text="Delete Theater"
                             type="danger"/>
                     </form>
                 </div>
@@ -31,7 +31,7 @@
                         Edit Theater "{{ $theater->name }}"
                     </h2>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300 mb-6">
-                        Clique no botão "Guardar" para guardar as informações.
+                        Click on the button "Save" to update the information.
                     </p>
                 </header>
 
@@ -44,6 +44,14 @@
                             <!-- Name Field -->
                             <x-field.input name="name" label="Nome" :readonly="$readonly"
                                 value="{{ old('name', $theater->name) }}" class="block w-full"/>
+
+                            <!-- Row Number Field -->
+                            <x-field.input name="row_number" label="Number of Rows" :readonly="$readonly"
+                                value="{{ old('row_number', $theater->row_number) }}" class="block w-full"/>
+
+                            <!-- Seat Number per Row Field -->
+                            <x-field.input name="seat_number_per_row" label="Seats per Row" :readonly="$readonly"
+                                value="{{ old('seat_number_per_row', $theater->seat_number_per_row) }}" class="block w-full"/>
                         </div>
 
                         <!-- Image Upload Field -->

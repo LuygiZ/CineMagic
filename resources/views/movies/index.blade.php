@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Gerenciar Filmes')
+@section('header-title', 'Manage Movies')
 
 @section('main')
 <div class="flex justify-center">
@@ -17,16 +17,18 @@
 
         <div class="flex items-center gap-4 mb-4">
             <x-button
-                href="{{route('movies.create')}}"
-                text="Criar um novo filme"
+                href="{{ route('movies.create') }}"
+                text="Create a New Movie"
                 type="success"/>
-            </div>
-        <div class="font-base text-sm text-gray-700 dark:text-gray-30">
+        </div>
+        
+        <div class="font-base text-sm text-gray-700 dark:text-gray-300">
             <x-movies.table :movies="$allMovies"
                 :showView="true"
                 :showEdit="true"
                 :showDelete="true"/>
         </div>
+
         <div class="mt-4 px-5">
             {{ $allMovies->links() }}
         </div>

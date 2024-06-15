@@ -6,7 +6,7 @@
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
         <!-- Name Field -->
-        <x-field.input name="name" label="Nome" :readonly="$readonly"
+        <x-field.input name="name" label="Name" :readonly="$readonly"
             value="{{ old('name', $theater->name) }}"/>
     </div>
 

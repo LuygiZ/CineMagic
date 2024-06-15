@@ -5,7 +5,7 @@
 
 @extends('layouts.main')
 
-@section('header-title', 'Novo Filme')
+@section('header-title', 'New Movie')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -14,10 +14,10 @@
             <section>
                 <header class="mb-6">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                        Novo Filme
+                        New Movie
                     </h2>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-                        Click on "Save" button to store the information.
+                        Click on the "Save" button to store the information.
                     </p>
                 </header>
 
@@ -26,14 +26,14 @@
 
                     <div class="flex flex-wrap space-x-8">
                         <div class="grow mt-6 space-y-4">
-                            <x-field.input name="title" label="Nome" :readonly="$readonly"
+                            <x-field.input name="title" label="Title" :readonly="$readonly"
                                 value="{{ old('title', $movie->title) }}" class="block w-full"/>
-                            <x-field.select name="genre_code" label="Género" :readonly="$readonly"
+                            <x-field.select name="genre_code" label="Genre" :readonly="$readonly"
                                 :options="$genres" :selected="old('genre_code', $movie->genre_code)" class="block w-full"/>
-                            <x-field.input name="year" label="Ano" :readonly="$readonly"
+                            <x-field.input name="year" label="Year" :readonly="$readonly"
                                 value="{{ old('year', $movie->year) }}" class="block w-full"/>
                             <div class="h-40 overflow-auto"> <!-- Add scrolling to synopsis field -->
-                                <x-field.textarea name="synopsis" label="Sumário" :readonly="$readonly"
+                                <x-field.textarea name="synopsis" label="Synopsis" :readonly="$readonly"
                                     value="{{ old('synopsis', $movie->synopsis) }}" class="resize-y"/>
                             </div>
                             <x-field.input name="trailer_url" label="Trailer URL" :readonly="$readonly"
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="flex mt-6">
-                        <x-button element="submit" type="dark" text="Guardar novo Filme" class="uppercase"/>
+                        <x-button element="submit" type="dark" text="Save New Movie" class="uppercase"/>
                     </div>
                 </form>
             </section>
