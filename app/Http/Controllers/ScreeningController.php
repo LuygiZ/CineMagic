@@ -140,7 +140,6 @@ class ScreeningController extends Controller
         }
 
 
-
         public function edit(Screening $screening)
         {
 
@@ -169,7 +168,7 @@ class ScreeningController extends Controller
             }
 
             $screening->delete();
-            $htmlMessage = "Sessão apagada com sucesso!";
+            $htmlMessage = "Session deleted successfully!";
             return redirect()->route('screenings.index')
                 ->with('alert-type', 'success')
                 ->with('alert-msg', $htmlMessage);

@@ -13,16 +13,16 @@
                             @method('DELETE')
                             <x-button
                                 element="submit"
-                                text="Eliminar Sessão"
+                                text="Delete Session"
                                 type="danger"/>
                         </form>
                     </div>
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            Editar Sessão do filme "{{ $screening->movie->title }}"
+                            Edit Film session "{{ $screening->movie->title }}"
                         </h2>
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-300  mb-6">
-                            Clique no botão "Guardar" para guardar as informações.
+                            Click the "Save" button to save the information.
                         </p>
                     </header>
 
@@ -31,9 +31,9 @@
                         @method('PUT')
                         @include('screenings.shared.fields', ['mode' => 'edit'])
                         <div class="flex mt-6">
-                            <x-button element="submit" type="dark" text="Guardar" class="uppercase"/>
-                            <x-button element="a" type="light" text="Cancelar" class="uppercase ms-4"
-                                        href="{{ url()->full() }}"/>
+                            <x-button element="submit" type="dark" text="Save" class="uppercase"/>
+                            <x-button element="a" type="light" text="Cancel" class="uppercase ms-4"
+                                        href="{{ route('screenings.index') }}"/>
                         </div>
                     </form>
                 </section>

@@ -25,7 +25,8 @@
             <x-screenings.table :screenings="$allScreenings"
                 :showView="false"
                 :showEdit="true"
-                :showDelete="true"/>
+                :showDelete="true"
+                :showSeats="false"/>
         </div>
         <div class="mt-4 px-5">
             {{ $allScreenings->links() }}

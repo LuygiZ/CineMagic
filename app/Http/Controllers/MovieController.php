@@ -151,7 +151,17 @@ class MovieController extends Controller
     public function show(Movie $movie): View
     {
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
-        return view('movies.show', compact('genres','movie'));
+
+        $today = Carbon::today();
+        $next15Days = Carbon::today()->addDays(15);
+
+        $allScreenings = Screening::where('movie_id', $movie->id)
+            ->whereBetween('date', [$today, $next15Days])
+            ->orderBy('date')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('movies.show', compact('genres','movie', 'allScreenings'));
     }
 
 }
