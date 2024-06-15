@@ -71,9 +71,6 @@
                                     content="Customers"
                                     href="#"/>
                                 <x-menus.submenu-item
-                                    content="Movies"
-                                    href="#"/>
-                                <x-menus.submenu-item
                                     content="Screenings"
                                     href="{{ route('screenings.index') }}"/>
                                 <x-menus.submenu-item
@@ -82,6 +79,9 @@
                                 <x-menus.submenu-item
                                     content="Statistics"
                                     href="{{ route('statistics.show') }}"/>
+                                <x-menus.submenu-item
+                                    content="Configurations"
+                                    href="{{ route('configurations.index') }}"/>
                         </x-menus.submenu>
                         @endauth
 

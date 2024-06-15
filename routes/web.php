@@ -6,6 +6,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\GenreController;
@@ -62,7 +63,6 @@ Route::resource('theater', TheaterController::class);
 Route::resource('genres', GenreController::class);
 
 //Pdf
-Route::get('generatePdf', [PdfController::class, 'generatePdf'])->name('pdf.generatePdf');
 Route::get('pdf/download', [PdfController::class, 'downloadPdf'])->name('pdf.download');
 
 //Statistics
@@ -70,6 +70,12 @@ Route::get('statistics', [StatisticController::class, 'index'])->name('statistic
 
 //Purchases
 Route::get('purchases', [PurchaseController::class, 'index'])->name('purchases.show');
+
+//Configurations
+Route::get('configurations/edit', [ConfigurationController::class, 'edit'])->name('configurations.edit');
+Route::get('configurations', [ConfigurationController::class, 'index'])->name('configurations.index');
+Route::put('configurations', [ConfigurationController::class, 'update'])->name('configurations.update');
+
 
 //Cart
 Route::get('cart', [CartController::class, 'show'])->name('cart.show');
@@ -90,10 +96,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';

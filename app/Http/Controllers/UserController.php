@@ -108,8 +108,6 @@ class UserController extends Controller
                 }
                 return $newUser;
             });
-
-
         }
 
         $htmlMessage = "User $newUser->name has been created successfully!";

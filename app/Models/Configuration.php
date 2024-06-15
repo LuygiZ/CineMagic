@@ -14,7 +14,7 @@ class Configuration extends Model
     protected $fillable = [
         'id',
         'ticket_price',
-        'registered_custom_ticket_discount',
+        'registered_customer_ticket_discount',
         'custom',
     ];
 

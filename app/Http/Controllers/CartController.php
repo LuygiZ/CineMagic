@@ -142,6 +142,12 @@ class CartController extends Controller
 
         $cart = session('cart');
 
+        if(Auth::user()->type != "C"){
+            return redirect()->route('cart.show')
+                ->with('alert-type', 'danger')
+                ->with('alert-msg', 'Only customers can make purchases! Please register with a customer account');
+        }
+
         $newPurchase = Purchase::create($validatedData);
         $newPurchase->customer_id = Auth::user()->customer->id;
         $newPurchase->save();
@@ -154,15 +160,39 @@ class CartController extends Controller
             $cartItem->save();
         }
 
-
-        return redirect()->route('pdf.generatePdf', [
-            'purchase' => $newPurchase->id,
-        ]);
+        return $this->generatePdf($newPurchase);
     }
 
     public function destroy(): RedirectResponse
     {
         session()->forget('cart');
         return redirect()->route('cart.show');
+    }
+
+    public function generatePdf($purchase)
+    {
+        $data = [
+            'title' => "CineMagic",
+            'date' => date('m/d/Y'),
+            'tickets' => session('cart'),
+            'purchase' => $purchase
+        ];
+
+        $pdfName = "Purchase".$purchase->id.".pdf";
+
+        $pdf = Pdf::loadView('pdf.generatePurchase', $data);
+        Storage::put('pdf_purchases/'.$pdfName, $pdf->output());
+
+        $purchase->receipt_pdf_filename = $pdfName;
+        $purchase->save();
+
+        session()->forget('cart');
+
+        $url = route('pdf.download',['pdfFilename' => 'Purchase'.$purchase->id.'.pdf']);
+
+        $htmlMessage = "Purchase made successfully! <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
+        return redirect()->route('cart.show')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
     }
 }
