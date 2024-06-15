@@ -11,13 +11,8 @@ class PdfController extends Controller
 {
     public function generatePdf(Request $request)
     {
-        $purchase = new Purchase();
-        $purchase->id = 1;
-        $purchase->customer_name = "joao";
-        $purchase->date = date('d/m/Y');
-        $purchase->customer_email = "123@mail.com";
-        $purchase->customer_nif = 123456789;
-        $purchase->total_price = 100;
+
+        $purchase = Purchase::find($request->purchase);
 
         $data = [
             'title' => "CineMagic",
@@ -26,9 +21,38 @@ class PdfController extends Controller
             'purchase' => $purchase
         ];
 
-        $pdf = Pdf::loadView('pdf.generatePurchase', $data);
-        Storage::put('pdf_purchases/Purchase'.$purchase->id.'.pdf', $pdf->output());
+        $pdfName = "Purchase".$purchase->id.".pdf";
 
-        return $pdf->download('Purchase.pdf');
+        $pdf = Pdf::loadView('pdf.generatePurchase', $data);
+        Storage::put('pdf_purchases/'.$pdfName, $pdf->output());
+
+        $purchase->receipt_pdf_filename = $pdfName;
+        $purchase->save();
+
+        session()->forget('cart');
+
+        $url = route('pdf.download',['pdfFilename' => 'Purchase'.$purchase->id.'.pdf']);
+
+        $htmlMessage = "Purchase made successfully! <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
+        return redirect()->route('cart.show')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
+    }
+
+    public function downloadPdf(Request $request){
+
+        $fileName = $request->pdfFilename;
+
+        if (!empty($fileName)) {
+            $filePath = storage_path('app/pdf_purchases/' . $fileName);
+
+            if (file_exists($filePath)) {
+                return response()->download($filePath, $fileName);
+            }
+        }
+
+        return redirect()->route('cart.show')
+            ->with('alert-type', 'error')
+            ->with('alert-msg', 'Pdf Not found.');
     }
 }

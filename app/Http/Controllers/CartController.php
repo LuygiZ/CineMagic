@@ -12,6 +12,9 @@ use App\Models\Ticket;
 use App\Models\Configuration;
 use App\Models\Purchase;
 use App\Http\Requests\PurchaseFormRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
@@ -140,6 +143,7 @@ class CartController extends Controller
         $cart = session('cart');
 
         $newPurchase = Purchase::create($validatedData);
+        $newPurchase->customer_id = Auth::user()->customer->id;
         $newPurchase->save();
 
         foreach($cart as $cartItem) {
@@ -150,8 +154,10 @@ class CartController extends Controller
             $cartItem->save();
         }
 
-        session()->forget('cart');
-        return redirect()->route('cart.show');
+
+        return redirect()->route('pdf.generatePdf', [
+            'purchase' => $newPurchase->id,
+        ]);
     }
 
     public function destroy(): RedirectResponse

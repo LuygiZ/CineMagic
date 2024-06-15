@@ -39,11 +39,6 @@
                             href="{{ route('movies.index') }}"
                         />
 
-                        <x-menus.menu-item
-                        content="Screenings"
-                        href="{{ route('screenings.index') }}"
-                        />
-
                         @auth
                         <!-- Menu Item: Theaters -->
                         <x-menus.menu-item
@@ -79,11 +74,14 @@
                                     content="Movies"
                                     href="#"/>
                                 <x-menus.submenu-item
-                                    content="Purchases"
-                                    href="#"/>
+                                    content="Screenings"
+                                    href="{{ route('screenings.index') }}"/>
+                                <x-menus.submenu-item
+                                    content="User Management"
+                                    href="{{ route('users.index') }}"/>
                                 <x-menus.submenu-item
                                     content="Statistics"
-                                    href="#"/>
+                                    href="{{ route('statistics.show') }}"/>
                         </x-menus.submenu>
                         @endauth
 
@@ -108,9 +106,9 @@
                                 </div>
                             </x-slot>
                             <x-menus.submenu-item
-                                content="User Management"
+                                content="Purchases"
                                 selectable="0"
-                                href="{{ route('users.index') }}"/>
+                                href="{{ route('purchases.show') }}"/>
                             <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"

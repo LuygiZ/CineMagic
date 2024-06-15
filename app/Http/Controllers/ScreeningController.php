@@ -240,11 +240,6 @@ class ScreeningController extends Controller
             $seats->maxSeatNumber = $seats->max('seat_number');
 
             foreach($seats as $seat){
-                /*if($hasScreeningPassed)
-                {
-                    $seat->ocupado = true;
-                    continue;
-                }*/
                 $seat->lugar = $seat->row.$seat->seat_number;
                 $seat->ocupado = $screening->tickets->contains('seat_id', $seat->id);
             }

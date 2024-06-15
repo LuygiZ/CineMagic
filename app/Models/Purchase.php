@@ -35,4 +35,14 @@ class Purchase extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function pdfExists($fileName){
+        if (!empty($fileName)) {
+            $filePath = storage_path('app/pdf_purchases/' . $fileName);
+
+            if (file_exists($filePath)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

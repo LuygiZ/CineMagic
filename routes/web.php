@@ -9,6 +9,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\StatisticController;
 
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
@@ -60,7 +62,14 @@ Route::resource('theater', TheaterController::class);
 Route::resource('genres', GenreController::class);
 
 //Pdf
-Route::get('generatePdf', [PdfController::class, 'generatePdf']);
+Route::get('generatePdf', [PdfController::class, 'generatePdf'])->name('pdf.generatePdf');
+Route::get('pdf/download', [PdfController::class, 'downloadPdf'])->name('pdf.download');
+
+//Statistics
+Route::get('statistics', [StatisticController::class, 'index'])->name('statistics.show');
+
+//Purchases
+Route::get('purchases', [PurchaseController::class, 'index'])->name('purchases.show');
 
 //Cart
 Route::get('cart', [CartController::class, 'show'])->name('cart.show');

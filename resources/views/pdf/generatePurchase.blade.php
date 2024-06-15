@@ -39,7 +39,7 @@
     <h3>Cliente: {{ $purchase->customer_name }}</h3>
     <h3>Data da Compra: {{ $purchase->date }}</h3>
     <h3>Email: {{ $purchase->customer_email}}</h3>
-    <h3>Total:{{ $purchase->total_price }}€</h3>
+    <h3>Total: {{ $purchase->total_price }}€</h3>
     <hr>
     <h2>Bilhetes</h2>
     <hr>

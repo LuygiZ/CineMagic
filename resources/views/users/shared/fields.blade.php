@@ -9,6 +9,12 @@
             value="{{ old('name', $user->name) }}"/>
         <x-field.input name="email" type="email" label="Email" :readonly="$readonly"
             value="{{ old('email', $user->email) }}"/>
+
+        @if ($user->type == "C")
+        <x-field.input name="nif" label="Nif" :readonly="$readonly"
+            value="{{ old('nif') ?: ($user->customer->nif ?? '----') }}"   />
+        @endif
+
         <x-field.select name="type" label="Type of User" :readonly="$readonly"
             :options="['A' => 'Administrator', 'E' => 'Employee', 'C' => 'Customer']"
             defaultValue="{{ old('type', $user->type) }}"/>
