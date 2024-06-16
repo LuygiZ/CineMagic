@@ -33,52 +33,52 @@
                     <!-- Menu Items -->
                     <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
                     invisible h-0 sm:visible sm:h-auto z-10">
-                        <!-- Menu Item: Movies -->
-                        <x-menus.menu-item
-                            content="Movies"
-                            selected="{{ Route::currentRouteName() == 'movies.index'}}"
-                            href="{{ route('movies.index') }}"
-                        />
 
-                        @auth
-                        <!-- Menu Item: Theaters -->
-                        <x-menus.menu-item
-                            content="Theaters"
-                            selectable="1"
-                            href="{{ route('theater.index') }}"
-                            selected="{{ Route::currentRouteName() == 'theater.index'}}"
+                        <!-- Menu Item: Movies -->
+                        @can('employeeOrAdmin')
+                            <x-menus.menu-item
+                                content="Movies"
+                                selected="{{ Route::currentRouteName() == 'movies.index'}}"
+                                href="{{ route('movies.index') }}"
                             />
 
+                        @endcan
+
                         <!-- Menu Item: Administração -->
-                        <x-menus.submenu
-                            selectable="0"
-                            uniqueName="submenu_others"
-                            content="Administration">
-                                <x-menus.submenu-item
-                                    content="Genres"
-                                    href="#"/>
-                                <x-menus.submenu-item
-                                    content="Theaters"
-                                    selected="{{ Route::currentRouteName() == 'theater.index'}}"
-                                    href="{{ route('theater.index') }}"/>
-                                <x-menus.submenu-item
-                                    content="Screenings"
-                                    selected="{{ Route::currentRouteName() == 'screenings.index'}}"
-                                    href="{{ route('screenings.index') }}"/>
-                                <x-menus.submenu-item
-                                    content="User Management"
-                                    selected="{{ Route::currentRouteName() == 'users.index'}}"
-                                    href="{{ route('users.index') }}"/>
-                                <x-menus.submenu-item
-                                    content="Statistics"
-                                    selected="{{ Route::currentRouteName() == 'statistics.show'}}"
-                                    href="{{ route('statistics.show') }}"/>
-                                <x-menus.submenu-item
-                                    content="Configurations"
-                                    selected="{{ Route::currentRouteName() == 'configurations.index'}}"
-                                    href="{{ route('configurations.index') }}"/>
-                        </x-menus.submenu>
-                        @endauth
+                        @can('employeeOrAdmin')
+                            <x-menus.submenu
+                                selectable="0"
+                                uniqueName="submenu_others"
+                                content="Administration">
+                                    <x-menus.submenu-item
+                                        content="Screenings"
+                                        selected="{{ Route::currentRouteName() == 'screenings.index'}}"
+                                        href="{{ route('screenings.index') }}"/>
+                                    <x-menus.submenu-item
+                                        content="Genres"
+                                        href="#"/>
+                                    <x-menus.submenu-item
+                                        content="Theaters"
+                                        selected="{{ Route::currentRouteName() == 'theater.index'}}"
+                                        href="{{ route('theater.index') }}"/>
+
+                                    @can('admin')
+                                        <x-menus.submenu-item
+                                            content="User Management"
+                                            selected="{{ Route::currentRouteName() == 'users.index'}}"
+                                            href="{{ route('users.index') }}"/>
+                                        <x-menus.submenu-item
+                                            content="Statistics"
+                                            selected="{{ Route::currentRouteName() == 'statistics.show'}}"
+                                            href="{{ route('statistics.show') }}"/>
+                                        <x-menus.submenu-item
+                                            content="Configurations"
+                                            selected="{{ Route::currentRouteName() == 'configurations.index'}}"
+                                            href="{{ route('configurations.index') }}"/>
+                                    @endcan
+
+                            </x-menus.submenu>
+                        @endcan
 
                         <div class="grow"></div>
                         @if (session('cart'))

@@ -22,7 +22,7 @@
                 name="photo_file"
                 width="md"
                 :readonly="$readonly"
-                deleteTitle="Apagar Foto"
+                deleteTitle="Delete Photo"
                 :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
                 deleteForm="form_to_delete_photo"
                 imageUrl="/storage/photos/{{$user->photo_filename}}"/>
@@ -31,7 +31,7 @@
                 name="photo_file"
                 width="md"
                 :readonly="$readonly"
-                deleteTitle="Apagar Foto"
+                deleteTitle="Delete Photo"
                 :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
                 deleteForm="form_to_delete_photo"
                 :imageUrl="Vite::asset('resources/img/photos/default.png')"/>

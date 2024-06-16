@@ -20,13 +20,39 @@
     </div>
 
     <div class="pb-6">
-        <x-field.image
-            name="poster_filename"
-            width="md"
-            :readonly="$readonly"
-            deleteTitle="Delete Photo"
-            :deleteAllow="($mode == 'edit') && ($movie->poster_filename)"
-            deleteForm="form_to_delete_photo"
-            imageUrl="/storage/posters/{{ $movie->poster_filename }}"/>
+        @if ($mode != "create")
+            @if ($movie->poster_filename)
+                <x-field.image
+                    name="poster_filename"
+                    width="md"
+                    :readonly="$readonly"
+                    deleteTitle="Delete Photo"
+                    :deleteAllow="($mode == 'edit') && ($movie->poster_filename)"
+                    deleteForm="form_to_delete_photo"
+                    imageUrl="/storage/posters/{{$movie->poster_filename}}"/>
+            @else
+                <x-field.image
+                    name="poster_filename"
+                    width="md"
+                    :readonly="$readonly"
+                    deleteTitle="Delete Photo"
+                    :deleteAllow="($mode == 'edit') && ($movie->poster_filename)"
+                    deleteForm="form_to_delete_photo"
+                    imageUrl="/storage/posters/_no_poster_1.png"/>
+
+            @endif
+
+        @else
+            <x-field.image
+                name="poster_filename"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Delete Photo"
+                :deleteAllow="($mode == 'edit') && ($movie->poster_filename)"
+                deleteForm="form_to_delete_photo"
+                imageUrl="/storage/posters/_no_poster_1.png"/>
+
+        @endif
     </div>
+
 </div>

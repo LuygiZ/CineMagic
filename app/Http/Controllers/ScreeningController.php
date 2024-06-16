@@ -20,39 +20,34 @@ class ScreeningController extends Controller
 {
     use HasFactory;
 
-        public function index(Request $request): View
-        {
-            $filterByMovieName = $request->query('movie_name');
-            $filterByTheater = $request->query('theater_id');
-            $filterByDate = $request->query('screeningDate');
+    public function index(Request $request): View
+    {
+        $filterByMovieName = $request->query('movie_name');
+        $filterByTheater = $request->query('theater_id');
+        $filterByDate = $request->query('screeningDate');
 
-            $screeningsQuery = Screening::query();
+        $screeningsQuery = Screening::query();
 
-            if ($filterByMovieName !== null) {
-                $screeningsQuery->join('movies', 'screenings.movie_id', '=', 'movies.id')
-                                ->where('movies.title', 'like', '%' . $filterByMovieName . '%');
-            }
-
-            if ($filterByTheater !== null) {
-                $screeningsQuery->where('theater_id', $filterByTheater);
-            }
-
-            if($filterByDate !== null){
-                $screeningsQuery->where('date', $filterByDate);
-            }
-
-            if ($filterByDate !== null) {
-                $screeningsQuery->where('date', $filterByDate);
-            }
-            $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Any Theater'] + $allTheaters;
-
-            $allScreenings = $screeningsQuery
-                ->paginate(20)
-                ->withQueryString();
-
-            return view('screenings.index', compact('allScreenings', 'allTheaters', 'filterByMovieName', 'filterByTheater', 'filterByDate'));
+        if (!empty($filterByTheater)) {
+            $screeningsQuery->where('theater_id', $filterByTheater);
         }
+
+        if (!empty($filterByDate)) {
+            $screeningsQuery->where('date', $filterByDate);
+        }
+        if (!empty($filterByMovieName)) {
+            $screeningsQuery->whereHas('movie', function ($query) use ($filterByMovieName) {
+                $query->where('title', 'like', $filterByMovieName. '%');
+            });
+        }
+        $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+        $allTheaters = [null => 'Any Theater'] + $allTheaters;
+
+        $allScreenings = $screeningsQuery->orderBy('date','desc')->paginate(20)->withQueryString();
+
+        return view('screenings.index', compact('allScreenings', 'allTheaters', 'filterByMovieName', 'filterByTheater', 'filterByDate'));
+    }
+
 
         public function create(): View
         {
@@ -73,7 +68,7 @@ class ScreeningController extends Controller
             }
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             return view('screenings.control', compact('screening', 'allTheaters'));
         }
@@ -85,7 +80,7 @@ class ScreeningController extends Controller
             }
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             $screening = Screening::find(session('screeningIdToControl'));
 
@@ -116,7 +111,7 @@ class ScreeningController extends Controller
             $screening = Screening::find($request->screening);
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             return view('screenings.control', compact('screening', 'allTheaters'));
         }
@@ -130,7 +125,7 @@ class ScreeningController extends Controller
             $screening = Screening::find($request->screening);
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             $htmlMessage = "O Bilhete Foi Aceite com sucesso!";
 
@@ -140,8 +135,9 @@ class ScreeningController extends Controller
         }
 
 
-        public function edit(Screening $screening)
+        public function edit(Screening $screening): View | RedirectResponse
         {
+
 
             if ($screening->tickets()->exists()) {
                 $htmlMessage = "The session cannot be edited! (has tickets)";
@@ -151,8 +147,7 @@ class ScreeningController extends Controller
             }
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
-
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             return view('screenings.edit', compact('screening', 'allTheaters'));
         }
@@ -244,7 +239,7 @@ class ScreeningController extends Controller
             }
 
             $allTheaters = Theater::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-            $allTheaters = [null => 'Qualquer Sala'] + $allTheaters;
+            $allTheaters = [null => 'Any Theater'] + $allTheaters;
 
             return view('screenings.seats', compact('screening', 'seats', 'allTheaters'));
         }

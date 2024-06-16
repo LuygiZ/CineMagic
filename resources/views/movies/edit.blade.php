@@ -13,7 +13,7 @@
                             text="Ver Detalhes"
                             type="info"/>
                         <form method="POST" action="{{ route('movies.destroy', ['movie' => $movie]) }}">
-                           
+
                             @csrf
                             @method('DELETE')
                             <x-button
@@ -21,14 +21,14 @@
                                 text="Eliminar Filme"
                                 type="danger"/>
                         </form>
-                        
+
                     </div>
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            Editar Filme "{{ $movie->name }}"
+                            Edit Movie "{{ $movie->title }}"
                         </h2>
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-300  mb-6">
-                            Clique no botão "Guardar" para guardar as informações.
+                            Click the "Save" button to save the information.
                         </p>
                     </header>
 
@@ -46,7 +46,7 @@
             </div>
         </div>
     <form class="hidden" id="form_to_delete_photo"
-        method="POST" action="#">
+        method="POST" action="{{ route('movies.photo.destroy', ['movie' => $movie]) }}">
         @csrf
         @method('DELETE')
     </form>

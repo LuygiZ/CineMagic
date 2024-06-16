@@ -6,6 +6,7 @@
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
 
+
         <x-field.input name="title" label="Movie Name" :readonly="$readonly"
             value="{{ old('title', $screening->movie ? $screening->movie->title : '') }}" />
 

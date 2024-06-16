@@ -40,7 +40,7 @@
         <h1 class="text-4xl text-center mt-5 font-extrabold text-gray-800">On Display</h1>
 
         <div class="flex flex-wrap justify-center mt-8 gap-8">
-            @foreach ($movies->take(8) as $movie)
+            @foreach ($movies as $movie)
                 <div class="relative overflow-hidden rounded-lg shadow-lg transform transition duration-500 hover:scale-105 max-w-sm">
                     @php
                         $posterPath = $movie->poster_filename ? 'storage/app/public/posters/' . $movie->poster_filename : 'storage/app/public/posters/_no_poster_1.png';

@@ -1,7 +1,7 @@
 <div {{ $attributes }} class="max-w-7xl mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @foreach ($theaters as $theater)
         @php
-            $photoPath = $theater->photo_filename ? 'storage/theater_photos/' . $theater->photo_filename : 'storage/app/public/posters/_no_poster_1.png';
+            $photoPath = $theater->photo_filename ? 'storage/theater_photos/' . $theater->photo_filename : '/storage/posters/_no_poster_1.png';
         @endphp
         <a href="{{ route('theater.show', ['theater' => $theater]) }}" class="block">
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl h-full"> <!-- Set fixed height for container -->

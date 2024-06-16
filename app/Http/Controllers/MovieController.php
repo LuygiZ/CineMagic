@@ -69,12 +69,11 @@ class MovieController extends Controller
         ]);
     }
 
-
     public function create(): View
     {
         $movie = new Movie();
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
-        return view('movies.create',compact('genres','movie'));
+        return view('movies.create', compact('genres', 'movie'));
     }
 
     public function store(MovieFormRequest $request): RedirectResponse
@@ -154,7 +153,7 @@ class MovieController extends Controller
 
         if (!Gate::allows('view', $movie)) {
             return abort(403, 'THIS ACTION IS UNAUTHORIZED.');
-        } 
+        }
 
         $genres = Genre::orderBy("name", "asc")->pluck("name", "code")->toArray();
 
@@ -169,5 +168,21 @@ class MovieController extends Controller
 
         return view('movies.show', compact('genres','movie', 'allScreenings'));
     }
+
+    public function destroyPhoto(Movie $movie): RedirectResponse
+    {
+        if ($movie->poster_filename) {
+            if (Storage::fileExists('public/photos/' . $movie->poster_filename)) {
+                Storage::delete('public/photos/' . $movie->poster_filename);
+            }
+            $movie->poster_filename = null;
+            $movie->save();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Photo from movie {$movie->title} deleted successfully");
+        }
+        return redirect()->back();
+    }
+
 
 }
