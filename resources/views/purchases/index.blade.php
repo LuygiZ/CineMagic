@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Statistics')
+@section('header-title', 'Purchases')
 
 @section('main')
 <div class="flex justify-center">

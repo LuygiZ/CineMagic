@@ -56,7 +56,8 @@
                                         href="{{ route('screenings.index') }}"/>
                                     <x-menus.submenu-item
                                         content="Genres"
-                                        href="#"/>
+                                        selected="{{ Route::currentRouteName() == 'genre.index'}}"
+                                        href="{{ route('genre.index') }}"/>
                                     <x-menus.submenu-item
                                         content="Theaters"
                                         selected="{{ Route::currentRouteName() == 'theater.index'}}"

@@ -67,13 +67,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         //Theater
         Route::resource('theater', TheaterController::class);
+        Route::delete('theater/{theater}/photo', [TheaterController::class, 'destroyPhoto'])->name('theater.photo.destroy');
 
         //Movies
         Route::resource('movies', MovieController::class);
         Route::delete('movies/{movie}/photo', [MovieController::class, 'destroyPhoto'])->name('movies.photo.destroy');
 
         //Genres
-        Route::resource('genres', GenreController::class);
+        Route::resource('genre', GenreController::class);
 
         //Sreenings
         Route::resource('screenings', ScreeningController::class);

@@ -15,9 +15,6 @@ use App\Http\Requests\PurchaseFormRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Mail\PurchaseConfirmationEmail;
-use Illuminate\Support\Facades\Mail;
-use App\Providers\Payment;
 
 class CartController extends Controller
 {
