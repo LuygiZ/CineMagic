@@ -7,13 +7,13 @@
     <div class="max-w-7xl mt-10 mx-auto px-4">
         <div class="bg-img relative rounded-lg shadow-lg overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-            <div class="absolute top-0 right-0 m-8 bg-white p-8 rounded-lg shadow-lg max-w-md">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-4">Book a Ticket</h2>
+            <div class="absolute top-0 right-0 m-8 bg-white p-8 rounded-lg shadow-lg max-w-md dark:bg-gray-900">
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4 dark:text-white">Book a Ticket</h2>
                 <form id="book-ticket-form" action="{{ route('screenings.seats', ['screening' => ':screeningId']) }}" method="GET" class="space-y-4">
                     @csrf
                     <div class="mb-4">
-                        <label for="movie_title" class="block text-sm font-medium text-gray-700">Movie Title</label>
-                        <select id="movie_title" name="movie_title" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                        <label for="movie_title" class="block text-sm font-medium text-gray-700 dark:text-white">Movie Title</label>
+                        <select id="movie_title" name="movie_title" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-900 dark:border-gray-700 dark:text-white" required>
                             <option value="">Select a movie</option>
                             @foreach ($movies as $movie)
                                 <option value="{{ $movie->id }}">{{ $movie->title }}</option>
@@ -21,9 +21,9 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="screening" class="block text-sm font-medium text-gray-700">Select Session</label>
-                        <select id="screening" name="screening" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    <div class="mb-4 hidden" id="screeningContainer">
+                        <label for="screening" class="block text-sm font-medium text-gray-700 dark:text-white">Select Session</label>
+                        <select id="screening" name="screening" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-900 dark:border-gray-700 dark:text-white" required>
                             <option value="">Select a session</option>
                         </select>
                     </div>
@@ -84,16 +84,21 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const movieSelect = document.getElementById('movie_title');
     const screeningSelect = document.getElementById('screening');
+    const screeningContainer = document.getElementById('screeningContainer');
     const bookNowBtn = document.getElementById('book-now-btn');
 
     const screenings = @json($screenings);
 
     movieSelect.addEventListener('change', function() {
         const selectedMovieId = this.value;
+        
         screeningSelect.innerHTML = '<option value="">Select a session</option>';
+
+        screeningContainer.classList.add("hidden");
 
         if (selectedMovieId) {
             const filteredScreenings = screenings.filter(screening => screening.movie_id == selectedMovieId);
+            screeningContainer.classList.remove("hidden");
 
             filteredScreenings.forEach(screening => {
                 const option = document.createElement('option');
