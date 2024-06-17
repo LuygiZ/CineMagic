@@ -112,15 +112,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('movies', MovieController::class)->only(['show']);
 
     //Seats
-    Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
+    Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats')
 
     //Cart
     Route::get('cart', [CartController::class, 'show'])->name('cart.show');
     Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::delete('cart/remove/{ticket}', [CartController::class, 'remove'])->name('cart.remove');
     Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
-
-//Route::post('cart/confirm', [CartController::class, 'confirm'])->name('cart.confirm');        ?????????????????????
 
 Route::get('/dashboard', function () {
     return view('dashboard');

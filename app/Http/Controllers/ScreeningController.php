@@ -14,6 +14,7 @@ use App\Models\Theater;
 use App\Models\Movie;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\ScreeningFormRequest;
 
 class ScreeningController extends Controller
@@ -224,6 +225,14 @@ class ScreeningController extends Controller
 
         public function seats($screening): View
         {
+
+            @debug(Gate::allows('viewSeats', $screening));
+
+
+            if (!Gate::authorize('vi')) {
+                return abort(403, 'THIS ACTION IS UNAUTHORIZED.');
+            }
+
             $screening = Screening::find($screening);
             $seats = $screening->theater->seats;
 
