@@ -16,33 +16,6 @@ use App\Http\Controllers\StatisticController;
 //Home route
 Route::get('/', [MovieController::class, 'indexPoster'])->name('home.show');
 
-//Filmes
-// Route::get('movies', [MovieController::class, 'index'])->name('movies.index');
-// Route::get('movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
-//Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
-// Route::post('movies', [MovieController::class, 'show'])->name('movies.show');
-// Route::put('movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
-// Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
-
-//Movies
-//Route::resource('movies', MovieController::class);
-
-//Manage Users
-//Route::get('users', [UserController::class, 'index'])->name('users.index');
-//Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-//Route::get('users/create', [UserController::class, 'create'])->name('users.create');
-//Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
-//Route::put('users/{user}/update', [UserController::class, 'update'])->name('users.update');
-//Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
-
-//Screenings
-//Route::get('screenings', [ScreeningController::class, 'index'])->name('screenings.index');
-//Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
-//Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
-//Route::put('screenings/{screening}/update', [ScreeningController::class, 'update'])->name('screenings.update');
-//Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
-
 //Autentication Required
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -112,7 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('movies', MovieController::class)->only(['show']);
 
     //Seats
-    Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats')
+    Route::get('screenings/seats/{screening}', [ScreeningController::class, 'seats'])->name('screenings.seats');
 
     //Cart
     Route::get('cart', [CartController::class, 'show'])->name('cart.show');

@@ -225,15 +225,17 @@ class ScreeningController extends Controller
 
         public function seats($screening): View
         {
+            $screening = Screening::find($screening);
 
-            @debug(Gate::allows('viewSeats', $screening));
+            $today = Carbon::today();
+            $twoWeeksFromNow = Carbon::today()->addDays(15);
 
+            $screeningDate = Carbon::parse($screening->date);
 
-            if (!Gate::authorize('vi')) {
+            if (!$screeningDate->between($today, $twoWeeksFromNow)) {
                 return abort(403, 'THIS ACTION IS UNAUTHORIZED.');
             }
 
-            $screening = Screening::find($screening);
             $seats = $screening->theater->seats;
 
             $screeningDate = Carbon::parse($screening->date);
