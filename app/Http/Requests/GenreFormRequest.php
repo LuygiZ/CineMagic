@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TheaterFormRequest extends FormRequest
+class GenreFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,17 +25,13 @@ class TheaterFormRequest extends FormRequest
 {
     return [
         'name' => 'required|string|max:255',
-        'rows' => 'integer|min:1|max:25',
-        'seats_per_row' => 'integer|min:1',
-        'photo_filename' => 'nullable|image|max:8192',
+
     ];
 }
 
+
     public function messages(): array
     {
-        return [
-            'title.required' => 'Title is required',
-            'photo_filename.required' => 'Photo is required',
-        ];
+        return [];
     }
 }

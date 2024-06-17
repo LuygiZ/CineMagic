@@ -141,4 +141,20 @@ class TheaterController extends Controller
         return view('theater.show')->with('theater', $theater);
     }
 
+    public function destroyPhoto(Theater $theater): RedirectResponse
+    {
+        if ($theater->photo_filename) {
+            if (Storage::fileExists('public/theater_photos/' . $theater->photo_filename)) {
+                Storage::delete('public/theater_photos/' . $theater->photo_filename);
+            }
+            $theater->photo_filename = null;
+            $theater->save();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Photo from theater {$theater->name} deleted successfully");
+        }
+        return redirect()->back();
+    }
+
+
 }

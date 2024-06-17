@@ -15,6 +15,8 @@ use App\Http\Requests\PurchaseFormRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\PurchaseConfirmationEmail;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -186,11 +188,13 @@ class CartController extends Controller
         $purchase->receipt_pdf_filename = $pdfName;
         $purchase->save();
 
+        Mail::to($purchase->customer_email)->send(new PurchaseConfirmationEmail($purchase));
+
         session()->forget('cart');
 
         $url = route('pdf.download',['pdfFilename' => 'Purchase'.$purchase->id.'.pdf']);
 
-        $htmlMessage = "Purchase made successfully! <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
+        $htmlMessage = "Purchase made successfully (Tickets were sent to email!) <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
         return redirect()->route('cart.show')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
