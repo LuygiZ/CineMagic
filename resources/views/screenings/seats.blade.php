@@ -74,7 +74,7 @@
 
                             <x-button
                                 element="submit"
-                                text="Adicionar ao Carrinho"
+                                text="Add to Cart"
                                 type="info"/>
                         </form>
 

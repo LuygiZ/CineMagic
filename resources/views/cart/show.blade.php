@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Carrinho')
+@section('header-title', 'Cart')
 
 @section('main')
     <div class="flex justify-center">
@@ -48,12 +48,12 @@
                 <div class="flex justify-end mt-4 space-x-4">
                     <form action="{{ route('cart.buy') }}" method="get">
                         @csrf
-                        <x-button element="submit" type="dark" text="Confirmar" class="px-6"/>
+                        <x-button element="submit" type="dark" text="Confirm" class="px-6"/>
                     </form>
                     <form action="{{ route('cart.destroy') }}" method="post">
                         @csrf
                         @method('DELETE')
-                        <x-button element="submit" type="danger" text="Limpar carrinho" class="px-6"/>
+                        <x-button element="submit" type="danger" text="Clear Cart" class="px-6"/>
                     </form>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'Carrinho')
+@section('header-title', 'Cart')
 
 @section('main')
     <div class="flex justify-center">
@@ -27,20 +27,20 @@
                             <x-field.select name="payment_type" id="payment_type" :options="$payments" value="{{old('payment_type')}}" label="Payment Method" class="block w-full"/>
                         </div>
                         <div class="w-full max-w-md" id="visa_ref_container">
-                            <x-field.input name="visa_ref" id="visa_ref" label="Visa Payment Reference" class="block w-full" value="{{old('visa_ref')}}"/>
+                            <x-field.input name="visa_ref" id="visa_ref" label="Visa Card Number" class="block w-full" value="{{old('visa_ref')}}"/>
                         </div>
                         <div class="w-full max-w-md" id="cvc_ref_container">
                             <x-field.input name="cvc_ref" id="cvc_ref" label="CVC" class="block w-full" value="{{old('cvc_ref')}}"/>
                         </div>
                         <div class="w-full max-w-md" id="mbway_ref_container">
-                            <x-field.input name="mbway_ref" id="mbway_ref" label="MBWay Payment Reference" class="block w-full" value="{{old('mbway_ref')}}"/>
+                            <x-field.input name="mbway_ref" id="mbway_ref" label="MBWay Phone Number" class="block w-full" value="{{old('mbway_ref')}}"/>
                         </div>
                         <div class="w-full max-w-md" id="paypal_ref_container">
-                            <x-field.input name="paypal_ref" id="paypal_ref" label="PayPal Payment Reference" class="block w-full" value="{{old('paypal_ref')}}"/>
+                            <x-field.input name="paypal_ref" id="paypal_ref" label="PayPal Email" class="block w-full" value="{{old('paypal_ref')}}"/>
                         </div>
                     </div>
                     <div class="flex justify-center mt-6">
-                        <x-button element="submit" type="dark" text="Confirmar" class="px-6"/>
+                        <x-button element="submit" type="dark" text="Confirm" class="px-6"/>
                     </div>
                 </form>
             </div>
