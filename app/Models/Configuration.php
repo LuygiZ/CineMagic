@@ -25,4 +25,10 @@ class Configuration extends Model
         $configuration = Configuration::first();
         return $configuration ? $configuration->ticket_price : null;
     }
+
+    public static function getTicketDiscount()
+    {
+        $configuration = Configuration::first();
+        return $configuration ? $configuration->registered_customer_ticket_discount : null;
+    }
 }

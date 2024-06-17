@@ -12,9 +12,9 @@
             <div class="my-8">
                 <h2 class="text-2xl font-bold mb-4">Sales By Month</h2>
                 <div class="overflow-x-auto">
-                    <table class="table-auto w-full border-collapse border border-gray-200">
+                    <table class="table-auto w-full border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-white">
                                 <th class="px-4 py-2">Month</th>
                                 <th class="px-4 py-2">Tickets Sold</th>
                                 <th class="px-4 py-2">Total Price (€)</th>
@@ -22,10 +22,10 @@
                         </thead>
                         <tbody>
                             @foreach($salesByMonth as $sale)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $sale->month }}</td>
-                                    <td class="border px-4 py-2">{{ $sale->tickets_sold }}</td>
-                                    <td class="border px-4 py-2">{{ $sale->total_sales }}€ </td>
+                                <tr class="border-b border-b-gray-400 dark:border-b-gray-500 dark:text-white text-center">
+                                    <td class="px-4 py-2">{{ isset($sale->month) ? $sale->month : 'From Always' }}</td>
+                                    <td class="px-4 py-2">{{ $sale->tickets_sold }}</td>
+                                    <td class="px-4 py-2">{{ $sale->total_sales }}€ </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -36,18 +36,18 @@
             <div class="my-8">
                 <h2 class="text-2xl font-bold mb-4">TOP - Sales By Film</h2>
                 <div class="overflow-x-auto">
-                    <table class="table-auto w-full border-collapse border border-gray-200">
+                    <table class="table-auto w-full border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-white">
                                 <th class="px-4 py-2">Movie</th>
                                 <th class="px-4 py-2">Tickets Sold</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($salesByMovie as $sale)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $sale->title }}</td>
-                                    <td class="border px-4 py-2">{{ $sale->tickets_sold }}</td>
+                                <tr class="border-b border-b-gray-400 dark:border-b-gray-500 dark:text-white text-center">
+                                    <td class="px-4 py-2">{{ $sale->title }}</td>
+                                    <td class="px-4 py-2">{{ $sale->tickets_sold }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -58,18 +58,18 @@
             <div class="my-8">
                 <h2 class="text-2xl font-bold mb-4">TOP - Occupation by Film</h2>
                 <div class="overflow-x-auto">
-                    <table class="table-auto w-full border-collapse border border-gray-200">
+                    <table class="table-auto w-full border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-white">
                                 <th class="px-4 py-2">Movie</th>
                                 <th class="px-4 py-2">Occupancy rate (%)</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($occupancyByMovie as $occupancy)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $occupancy->title }}</td>
-                                    <td class="border px-4 py-2">{{ $occupancy->occupancy_rate }}%</td>
+                                <tr class="border-b border-b-gray-400 dark:border-b-gray-500 dark:text-white text-center">
+                                    <td class="px-4 py-2">{{ $occupancy->title }}</td>
+                                    <td class="px-4 py-2">{{ $occupancy->occupancy_rate }}%</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -80,9 +80,9 @@
             <div class="my-8">
                 <h2 class="text-2xl font-bold mb-4">TOP - Purchases By Client </h2>
                 <div class="overflow-x-auto">
-                    <table class="table-auto w-full border-collapse border border-gray-200">
+                    <table class="table-auto w-full border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-white">
                                 <th class="px-4 py-2">Client</th>
                                 <th class="px-4 py-2">Number of Purchases</th>
                                 <th class="px-4 py-2">Total Spent</th>
@@ -90,10 +90,10 @@
                         </thead>
                         <tbody>
                             @foreach($customerPurchases as $purchase)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $purchase->name }}</td>
-                                    <td class="border px-4 py-2">{{ $purchase->purchases }}</td>
-                                    <td class="border px-4 py-2">{{ $purchase->total_spent }}€</td>
+                                <tr class="border-b border-b-gray-400 dark:border-b-gray-500 dark:text-white text-center">
+                                    <td class="px-4 py-2">{{ $purchase->name }}</td>
+                                    <td class="px-4 py-2">{{ $purchase->purchases }}</td>
+                                    <td class="px-4 py-2">{{ $purchase->total_spent }}€</td>
                                 </tr>
                             @endforeach
                         </tbody>

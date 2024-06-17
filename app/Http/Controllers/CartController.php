@@ -15,6 +15,9 @@ use App\Http\Requests\PurchaseFormRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\PurchaseConfirmationEmail;
+use Illuminate\Support\Facades\Mail;
+use App\Providers\Payment;
 
 class CartController extends Controller
 {
@@ -60,6 +63,9 @@ class CartController extends Controller
         $cart = session('cart');
         $screening = Screening::find($request->input('screening_id'));
         $price = Configuration::getTicketPrice();
+        if(empty(Auth::user()->customer->purchases)){
+            $price-=Configuration::getTicketDiscount();
+        }
 
         foreach ($selectedSeats as $seatId => $value) {
             $seat = Seat::find($seatId);
@@ -131,7 +137,7 @@ class CartController extends Controller
         return redirect()->route('cart.show');
     }
 
-    public function store(PurchaseFormRequest $request): RedirectResponse
+    public function store(PurchaseFormRequest $request)
     {
         if (!session()->has('cart')) {
             return redirect()->route('cart.show');
@@ -139,6 +145,44 @@ class CartController extends Controller
 
         $validatedData = $request->validated();
         $validatedData['date'] = date('Y-m-d');
+
+        switch($validatedData['payment_type']){
+            case 'VISA':
+                if(!Payment::payWithVisa($validatedData['visa_ref'], $validatedData['cvc_ref'])){
+                    return redirect()->route('cart.buy')
+                    ->with('alert-type', 'danger')
+                    ->with('alert-msg', 'Payment with Visa failed');
+                }
+
+                $validatedData['payment_ref'] = $validatedData['visa_ref'];
+                break;
+            case 'MBWAY':
+                if(!Payment::payWithMBway($validatedData['mbway_ref'])){
+                    return redirect()->route('cart.buy')
+                    ->with('alert-type', 'danger')
+                    ->with('alert-msg', 'Payment with MBWay failed');
+                }
+
+                $validatedData['payment_ref'] = $validatedData['mbway_ref'];
+                break;
+            case 'PAYPAL':
+                if(!Payment::payWithPaypal($validatedData['paypal_ref'])){
+                    return redirect()->route('cart.buy')
+                    ->with('alert-type', 'danger')
+                    ->with('alert-msg', 'Payment with PayPal failed');
+                }
+
+                $validatedData['payment_ref'] = $validatedData['paypal_ref'];
+                break;
+            default: 
+                return redirect()->route('cart.show')
+                ->with('alert-type', 'danger')
+                ->with('alert-msg', 'That payment type is not allowed');
+        }
+
+        unset($validatedData['paypal_ref']);
+        unset($validatedData['mbway_ref']);
+        unset($validatedData['visa_ref']);
 
         $cart = session('cart');
 
@@ -186,11 +230,13 @@ class CartController extends Controller
         $purchase->receipt_pdf_filename = $pdfName;
         $purchase->save();
 
+        Mail::to($purchase->customer_email)->send(new PurchaseConfirmationEmail($purchase));
+
         session()->forget('cart');
 
         $url = route('pdf.download',['pdfFilename' => 'Purchase'.$purchase->id.'.pdf']);
 
-        $htmlMessage = "Purchase made successfully! <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
+        $htmlMessage = "Purchase made successfully (Tickets were sent to email!) <a href='$url'><u>CLICK HERE TO DOWNLOAD THE TICKETS</u></a>";
         return redirect()->route('cart.show')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);

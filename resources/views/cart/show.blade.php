@@ -6,10 +6,10 @@
     <div class="flex justify-center">
         <div class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50 w-full max-w-4xl">
             @empty($cart)
-                <h3 class="text-xl w-96 text-center">O Carrinho está vazio</h3>
+                <h3 class="text-xl w-96 text-center">The cart it's empty</h3>
             @else
             <div class="mt-5">
-                <h3 class="mb-4 text-2xl text-center">Carrinho de Compras</h3>
+                <h3 class="mb-4 text-2xl text-center">Tickets Cart</h3>
                 <table class="w-full table-auto border-collapse">
                     <thead>
                         <tr class="border-b-2 border-gray-400 dark:border-gray-500 bg-gray-100 dark:bg-gray-800">
